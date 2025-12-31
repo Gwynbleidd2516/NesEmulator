@@ -4,15 +4,16 @@
 #include "IInstruction.h"
 #include "Accumulator.h"
 #include "StackPointer.h"
+#include "HasFlags.h"
 
-class PullAcc : public IInstruction
+class PullAcc : public IInstruction, public HasFlags
 {
 private:
     Accumulator *mAccumulator;
     StackPointer *mStack;
 
 public:
-    PullAcc(Accumulator *accumulator, StackPointer *stack)
+    PullAcc(Accumulator *accumulator, StackPointer *stack, Flags *fl) : HasFlags(fl)
     {
         mAccumulator = accumulator;
         mStack = stack;
@@ -24,8 +25,10 @@ public:
 
     void execute() override
     {
-        // mAccumulator->setValue(mStack->pull());
-        mAccumulator->operator=(mStack->pull());
+        mFlags->Zero = (mStack->getValue() == 0);
+        mFlags->Negative = (mStack->getValue() >> 7);
+        mAccumulator->setValue(mStack->pull());
+        // mAccumulator->operator=(mStack->pull());
     }
 };
 
