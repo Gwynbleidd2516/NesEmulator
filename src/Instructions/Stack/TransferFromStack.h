@@ -4,15 +4,16 @@
 #include "IInstruction.h"
 #include "Index.h"
 #include "StackPointer.h"
+#include "HasFlags.h"
 
-class TransferFromStack : public IInstruction
+class TransferFromStack : public IInstruction, public HasFlags
 {
 private:
     Index *mIndex;
     StackPointer *mStack;
 
 public:
-    TransferFromStack(Index *index, StackPointer *stack)
+    TransferFromStack(Index *index, StackPointer *stack, Flags *fl) : HasFlags(fl)
     {
         mIndex = index;
         mStack = stack;
@@ -24,6 +25,8 @@ public:
 
     void execute() override
     {
+        mFlags->Zero = (mStack->getValue() == 0);
+        mFlags->Negative = (mStack->getValue() >> 7);
         mIndex->setValue(mStack->getValue());
     }
 };
