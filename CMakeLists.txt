@@ -35,7 +35,7 @@ message(--INCLUDE-->${MY_INCLUDES})
 # message(--TARGET_HEADERS_2-->${TARGET_HEADERS_2})
 # message(--TARGET_HEADERS_3-->${TARGET_HEADERS_3})
 
-add_executable(main ${TARGET_SRC} ${TARGET_HEADERS})
+add_executable(main ${TARGET_HEADERS} ${TARGET_HEADERS})
 
 target_include_directories(main PUBLIC ${MY_INCLUDES})
 
