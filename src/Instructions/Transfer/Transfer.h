@@ -8,10 +8,10 @@
 class Transfer : public HasAdressMode, public HasFlags
 {
 private:
-    shared_ptr<Implied> mDest;
+    Implied *mDest;
 
 public:
-    Transfer(shared_ptr<Implied> dest, shared_ptr<Implied> adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
+    Transfer(Implied *dest, Implied *adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
     {
         mDest = dest;
     }

@@ -11,7 +11,7 @@ class Dec : public HasAdressMode, public HasFlags
     //     shared_ptr<IAdressMode> mReg;
 
 public:
-    Dec(shared_ptr<IAdressMode> adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
+    Dec(IAdressMode *adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
     {
         // mReg = reg;
     }

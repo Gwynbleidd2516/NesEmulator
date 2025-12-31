@@ -8,10 +8,10 @@
 class Add : public HasAdressMode, public HasFlags
 {
 private:
-    shared_ptr<Implied> mReg;
+    Implied *mReg;
 
 public:
-    Add(shared_ptr<Implied> reg, shared_ptr<IAdressMode> adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
+    Add(Implied *reg, IAdressMode *adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
     {
         mReg = reg;
     }

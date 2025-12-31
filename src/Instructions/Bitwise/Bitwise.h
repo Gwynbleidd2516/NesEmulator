@@ -8,10 +8,10 @@
 class Bitwise : public HasAdressMode, public HasFlags
 {
 protected:
-    shared_ptr<Implied> mReg;
+    Accumulator *mReg;
 
 public:
-    Bitwise(shared_ptr<Implied> reg, shared_ptr<IAdressMode> adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
+    Bitwise(Accumulator *reg, IAdressMode *adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
     {
         mReg = reg;
     }

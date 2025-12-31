@@ -8,10 +8,10 @@
 class Sub : public HasAdressMode, public HasFlags
 {
 private:
-    shared_ptr<Implied> mReg;
+    Implied *mReg;
 
 public:
-    Sub(shared_ptr<Implied> reg, shared_ptr<IAdressMode> adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
+    Sub(Implied *reg, IAdressMode *adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
     {
         mReg = reg;
     }

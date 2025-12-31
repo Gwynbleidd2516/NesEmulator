@@ -11,7 +11,7 @@ protected:
     // vector<uint8_t>::iterator mBegin;
 
 public:
-    Branch(vector<uint8_t>::iterator *it, shared_ptr<IAdressMode> adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
+    Branch(vector<uint8_t>::iterator *it, IAdressMode *adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
     {
         // mBegin = begin;
         mPC = it;

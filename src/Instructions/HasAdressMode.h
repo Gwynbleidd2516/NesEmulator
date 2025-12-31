@@ -9,10 +9,10 @@ using namespace std;
 class HasAdressMode : public IInstruction
 {
 protected:
-    shared_ptr<IAdressMode> mAdressMode;
+    IAdressMode* mAdressMode;
 
 public:
-    HasAdressMode(shared_ptr<IAdressMode> adressMode)
+    HasAdressMode(IAdressMode* adressMode)
     {
         mAdressMode = adressMode;
     }

@@ -8,10 +8,10 @@
 class Compare : public HasAdressMode, public HasFlags
 {
 protected:
-    shared_ptr<IAdressMode> mSrc;
+    IAdressMode *mSrc;
 
 public:
-    Compare(shared_ptr<Implied> adressMode, shared_ptr<IAdressMode> src, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
+    Compare(Implied *adressMode, IAdressMode *src, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
     {
         mSrc = src;
     }

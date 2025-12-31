@@ -12,7 +12,7 @@ protected:
     StackPointer *mSP;
 
 public:
-    Jump(vector<uint8_t>::iterator begin, shared_ptr<IAdressMode> adressMode, StackPointer *SP) : HasAdressMode(adressMode)
+    Jump(vector<uint8_t>::iterator begin, IAdressMode *adressMode, StackPointer *SP) : HasAdressMode(adressMode)
     {
         mBegin = begin;
         mSP = SP;

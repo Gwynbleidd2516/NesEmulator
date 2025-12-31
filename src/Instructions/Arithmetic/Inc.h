@@ -10,7 +10,7 @@ class Inc : public HasAdressMode, public HasFlags
 {
 
 public:
-    Inc(shared_ptr<IAdressMode> adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
+    Inc(IAdressMode *adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
     {
         // mReg = reg;
     }
