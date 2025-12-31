@@ -8,12 +8,22 @@ class Branch : public HasAdressMode, public HasFlags
 {
 protected:
     vector<uint8_t>::iterator *mPC;
-    vector<uint8_t>::iterator mBegin;
+    // vector<uint8_t>::iterator mBegin;
 
 public:
-    Branch(vector<uint8_t>::iterator begin, shared_ptr<IAdressMode> adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
+    Branch(vector<uint8_t>::iterator *it, shared_ptr<IAdressMode> adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
     {
+        // mBegin = begin;
+        mPC = it;
     }
+
+    void execute() override
+    {
+        if (cond())
+            *mPC += mAdressMode->getValue() + 2;
+    }
+
+    virtual bool cond() const = 0;
 };
 
 #endif

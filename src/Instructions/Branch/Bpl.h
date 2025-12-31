@@ -1,16 +1,16 @@
-#ifndef BCC
-#define BCC
+#ifndef BPL
+#define BPL
 
 #include "Branch.h"
 
-class Bcc : public Branch
+class Bpl : public Branch
 {
 public:
     using Branch::Branch;
 
     bool cond() const override
     {
-        return !mFlags->Carry;
+        return !mFlags->Negative;
     }
 };
 

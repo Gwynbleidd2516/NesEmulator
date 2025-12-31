@@ -16,10 +16,10 @@ public:
         mSrc = src;
     }
 
-    void code(vector<uint8_t>::iterator &it) override
-    {
-        mAdressMode->code(it);
-    }
+    // void code(vector<uint8_t>::iterator &it) override
+    // {
+    //     mAdressMode->code(it);
+    // }
 };
 
 #endif
