@@ -3,7 +3,7 @@
 
 #include "IInstruction.h"
 
-class HasFlags : public IInstruction
+class HasFlags
 {
 protected:
     Flags *mFlags;
