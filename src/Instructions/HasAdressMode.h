@@ -9,10 +9,10 @@ using namespace std;
 class HasAdressMode : public IInstruction
 {
 protected:
-    IAdressMode* mAdressMode;
+    IAdressMode *mAdressMode;
 
 public:
-    HasAdressMode(IAdressMode* adressMode)
+    HasAdressMode(IAdressMode *adressMode)
     {
         mAdressMode = adressMode;
     }
@@ -20,6 +20,11 @@ public:
     virtual void code(vector<uint8_t>::iterator &it) override
     {
         mAdressMode->code(it);
+    }
+
+    ~HasAdressMode()
+    {
+        delete mAdressMode;
     }
 };
 
