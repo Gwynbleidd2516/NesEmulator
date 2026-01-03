@@ -7,7 +7,7 @@
 class Rti : public Jump, public HasFlags
 {
 public:
-    Rti(vector<uint8_t>::iterator begin, IAdressMode *adressMode, StackPointer *SP, Flags *fl) : Jump(begin, adressMode, SP), HasFlags(fl)
+    Rti(vector<uint8_t>::iterator begin, StackPointer *SP, Flags *fl) : Jump(begin, nullptr, SP), HasFlags(fl)
     {
     }
 
