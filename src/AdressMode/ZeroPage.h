@@ -42,19 +42,19 @@ class ZeroPageInd : public IAdressMode
 private:
     uint8_t *mMem;
     vector<uint8_t> *mPPU;
-    uint8_t *mReg;
+    Index *mReg;
 
 public:
-    ZeroPageInd(vector<uint8_t> &ppu, uint8_t &reg)
+    ZeroPageInd(vector<uint8_t> &ppu, Index *reg)
     {
         mPPU = &ppu;
-        mReg = &reg;
+        mReg = reg;
     }
 
     void code(vector<uint8_t>::iterator &it) override
     {
         it++;
-        mMem = &mPPU->at(*it + *mReg);
+        mMem = &mPPU->at(*it + mReg->getValue());
     }
 
     void setValue(uint8_t val) override
