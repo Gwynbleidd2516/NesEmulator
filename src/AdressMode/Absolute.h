@@ -51,20 +51,20 @@ class AbsoluteInd : public IAdressMode
 private:
     uint8_t *mMem;
     vector<uint8_t> *mPPU;
-    uint8_t *mReg;
+    Index *mReg;
 
 public:
-    AbsoluteInd(vector<uint8_t> &ppu, uint8_t &reg)
+    AbsoluteInd(vector<uint8_t> &ppu, Index *reg)
     {
         mPPU = &ppu;
-        mReg = &reg;
+        mReg = reg;
     }
 
     void code(vector<uint8_t>::iterator &it) override
     {
         it++;
 
-        mMem = &mPPU->at(from8to16(*it, *(it + 1)) + *mReg);
+        mMem = &mPPU->at(from8to16(*it, *(it + 1)) + mReg->getValue());
         it++;
     }
 
