@@ -20,7 +20,10 @@ public:
     void execute() override
     {
         if (cond())
-            *mPC += mAdressMode->getValue() + 2;
+        {
+            int8_t buf = mAdressMode->getValue();
+            *mPC += buf + 3;
+        }
     }
 
     virtual bool cond() const = 0;
