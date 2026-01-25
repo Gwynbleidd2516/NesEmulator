@@ -20,6 +20,10 @@ public:
     {
         *mDest = mState;
     }
+
+    void code(vector<uint8_t>::iterator &) override
+    {
+    }
 };
 
 #endif
