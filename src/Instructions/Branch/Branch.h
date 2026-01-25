@@ -22,7 +22,7 @@ public:
         if (cond())
         {
             int8_t buf = mAdressMode->getValue();
-            *mPC += buf + 3;
+            *mPC += buf;
         }
     }
 
