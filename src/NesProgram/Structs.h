@@ -78,12 +78,17 @@ struct CPU
 
     TestMode testMode;
 
-    uint8_t something[8160];
+    uint8_t expansionROM[8160];
 
     uint8_t ram[8192];
     uint8_t rom[32768];
 
     uint8_t &operator[](size_t i)
+    {
+        return *((uint8_t *)this + i);
+    }
+
+    uint8_t &at(size_t i)
     {
         return *((uint8_t *)this + i);
     }
