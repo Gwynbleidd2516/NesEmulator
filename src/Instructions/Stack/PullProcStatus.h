@@ -9,22 +9,23 @@ class PullProcStatus : public IInstruction
 {
 private:
     Flags *mFlags;
-    StackPointer *mStack;
+    uint8_t **mStack;
 
 public:
-    PullProcStatus(Flags *flags, StackPointer *stack)
+    PullProcStatus(Flags *flags, uint8_t **stack)
     {
         mFlags = flags;
         mStack = stack;
     }
 
-    void code(vector<uint8_t>::iterator &) override
+    void code(uint8_t **) override
     {
     }
 
     void execute() override
     {
-        *mFlags = mStack->pull();
+        (*mStack)--;
+        *mFlags = **mStack;
     }
 };
 

@@ -12,7 +12,9 @@ struct Registers
     Index X;
     Index Y;
     Flags flags;
-    StackPointer sp;
+    // StackPointer sp;
+    uint8_t *sp;
+    uint8_t *pc;
 };
 
 #endif

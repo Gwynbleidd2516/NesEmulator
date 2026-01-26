@@ -9,22 +9,23 @@ class PushProcStatus : public IInstruction
 {
 private:
     Flags *mFlags;
-    StackPointer *mStack;
+    uint8_t **mStack;
 
 public:
-    PushProcStatus(Flags *flags, StackPointer *stack)
+    PushProcStatus(Flags *flags, uint8_t **stack)
     {
         mFlags = flags;
         mStack = stack;
     }
 
-    void code(vector<uint8_t>::iterator &) override
+    void code(uint8_t **) override
     {
     }
 
     void execute() override
     {
-        mStack->push(static_cast<uint8_t>(*mFlags));
+        **mStack = (static_cast<uint8_t>(*mFlags));
+        (*mStack)++;
     }
 };
 

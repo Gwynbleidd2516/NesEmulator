@@ -15,7 +15,7 @@ public:
         mReg = src;
     }
 
-    void code(vector<uint8_t>::iterator &)
+    void code(uint8_t **)
     {
     }
 

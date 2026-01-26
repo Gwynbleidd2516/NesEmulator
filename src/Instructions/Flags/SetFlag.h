@@ -21,7 +21,7 @@ public:
         *mDest = mState;
     }
 
-    void code(vector<uint8_t>::iterator &) override
+    void code(uint8_t **) override
     {
     }
 };

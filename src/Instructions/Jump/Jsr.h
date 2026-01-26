@@ -10,10 +10,13 @@ public:
 
     void execute() override
     {
-        uint16_t buf = *mPC - mBegin;
-        mSP->push(buf >> 8);
-        mSP->push(buf & 0xFF);
-        *mPC = mBegin + mAdressMode->getValue();
+        uint16_t buf = *mPC - (uint8_t *)mBegin;
+        **mSP = buf >> 8;
+        (*mSP)++;
+        **mSP = (buf & 0xFF);
+        (*mSP)++;
+        *mPC = (uint8_t *)mBegin + mAdressMode->getValue();
+        // *mPC = mAdressMode->getValue();
     }
 };
 

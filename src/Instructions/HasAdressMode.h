@@ -17,7 +17,7 @@ public:
         mAdressMode = adressMode;
     }
 
-    virtual void code(vector<uint8_t>::iterator &it) override
+    virtual void code(uint8_t **it) override
     {
         mAdressMode->code(it);
     }

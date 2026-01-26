@@ -6,7 +6,7 @@
 class Empty : public IAdressMode
 {
 public:
-    void code(vector<uint8_t>::iterator &)
+    void code(uint8_t **)
     {
     }
 

@@ -7,21 +7,21 @@
 class Jump : public HasAdressMode
 {
 protected:
-    vector<uint8_t>::iterator *mPC;
-    vector<uint8_t>::iterator mBegin;
-    StackPointer *mSP;
+    uint8_t **mPC;
+    CPU *mBegin;
+    uint8_t **mSP;
 
 public:
-    Jump(vector<uint8_t>::iterator begin, IAdressMode *adressMode, StackPointer *SP) : HasAdressMode(adressMode)
+    Jump(CPU *begin, IAdressMode *adressMode, uint8_t **SP) : HasAdressMode(adressMode)
     {
         mBegin = begin;
         mSP = SP;
     }
 
-    void code(vector<uint8_t>::iterator &it) override
+    void code(uint8_t **it) override
     {
         mAdressMode->code(it);
-        mPC = &it;
+        mPC = it;
     }
 };
 

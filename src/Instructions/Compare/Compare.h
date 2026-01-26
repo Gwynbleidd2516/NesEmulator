@@ -11,15 +11,10 @@ protected:
     IAdressMode *mSrc;
 
 public:
-    Compare(Implied *adressMode, IAdressMode *src, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
+    Compare(Implied *src, IAdressMode *adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
     {
         mSrc = src;
     }
-
-    // void code(vector<uint8_t>::iterator &it) override
-    // {
-    //     mAdressMode->code(it);
-    // }
 };
 
 #endif

@@ -9,22 +9,23 @@ class PushAcc : public IInstruction
 {
 private:
     Accumulator *mAccumulator;
-    StackPointer *mStack;
+    uint8_t **mStack;
 
 public:
-    PushAcc(Accumulator *accumulator, StackPointer *stack)
+    PushAcc(Accumulator *accumulator, uint8_t **stack)
     {
         mAccumulator = accumulator;
         mStack = stack;
     }
 
-    void code(vector<uint8_t>::iterator &) override
+    void code(uint8_t **) override
     {
     }
 
     void execute() override
     {
-        mStack->push(mAccumulator->getValue());
+        **mStack = mAccumulator->getValue();
+        (*mStack)++;
     }
 };
 

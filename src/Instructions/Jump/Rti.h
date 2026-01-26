@@ -7,21 +7,24 @@
 class Rti : public Jump, public HasFlags
 {
 public:
-    Rti(vector<uint8_t>::iterator begin, StackPointer *SP, Flags *fl) : Jump(begin, nullptr, SP), HasFlags(fl)
+    Rti(CPU *begin, uint8_t **SP, Flags *fl) : Jump(begin, nullptr, SP), HasFlags(fl)
     {
     }
 
     void execute() override
     {
         Flags a;
-        a = mSP->pull();
+        a = **mSP;
+        (*mSP)--;
         a.Break = false;
         a.Interrupt = false;
         *mFlags = a;
         uint16_t buf = 0;
-        buf += mSP->pull();
-        buf += mSP->pull() << 8;
-        *mPC = mBegin + buf;
+        buf += **mSP;
+        (*mSP)--;
+        buf += **mSP;
+        (*mSP)--;
+        *mPC = (uint8_t *)mBegin + buf;
     }
 };
 

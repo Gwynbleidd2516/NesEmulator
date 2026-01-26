@@ -7,19 +7,19 @@ class Absolute : public IAdressMode
 {
 private:
     uint8_t *mMem;
-    vector<uint8_t> *mPPU;
+    CPU *mPPU;
 
 public:
-    Absolute(vector<uint8_t> &ppu)
+    Absolute(CPU &ppu)
     {
         mPPU = &ppu;
     }
 
-    void code(vector<uint8_t>::iterator &it) override
+    void code(uint8_t **it) override
     {
-        it++;
-        mMem = &mPPU->at(from8to16(*it, *(it + 1)));
-        it++;
+        (*it)++;
+        mMem = &(mPPU->at(from8to16(**it, *(*it + 1))));
+        (*it)++;
     }
 
     void setValue(uint8_t val) override
@@ -50,22 +50,22 @@ class AbsoluteInd : public IAdressMode
 {
 private:
     uint8_t *mMem;
-    vector<uint8_t> *mPPU;
+    CPU *mPPU;
     Index *mReg;
 
 public:
-    AbsoluteInd(vector<uint8_t> &ppu, Index *reg)
+    AbsoluteInd(CPU &ppu, Index *reg)
     {
         mPPU = &ppu;
         mReg = reg;
     }
 
-    void code(vector<uint8_t>::iterator &it) override
+    void code(uint8_t **it) override
     {
-        it++;
+        (*it)++;
 
-        mMem = &mPPU->at(from8to16(*it, *(it + 1)) + mReg->getValue());
-        it++;
+        mMem = &mPPU->at(from8to16(**it, *(*it + 1)) + mReg->getValue());
+        (*it)++;
     }
 
     void setValue(uint8_t val) override

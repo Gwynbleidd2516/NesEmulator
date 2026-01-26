@@ -11,9 +11,11 @@ public:
     void execute() override
     {
         uint16_t buf = 0;
-        buf += mSP->pull();
-        buf += mSP->pull() << 8;
-        *mPC = mBegin + buf;
+        buf += **mSP;
+        (*mSP)--;
+        buf += **mSP << 8;
+        (*mSP)--;
+        *mPC = (uint8_t *)mBegin + buf;
     }
 };
 

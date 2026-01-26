@@ -10,24 +10,26 @@ class TransferFromStack : public IInstruction, public HasFlags
 {
 private:
     Index *mIndex;
-    StackPointer *mStack;
+    uint8_t **mStack;
 
 public:
-    TransferFromStack(Index *index, StackPointer *stack, Flags *fl) : HasFlags(fl)
+    TransferFromStack(Index *index, uint8_t **stack, Flags *fl) : HasFlags(fl)
     {
         mIndex = index;
         mStack = stack;
     }
 
-    void code(vector<uint8_t>::iterator &) override
+    void code(uint8_t **) override
     {
     }
 
     void execute() override
     {
-        mFlags->Zero = (mStack->getValue() == 0);
-        mFlags->Negative = (mStack->getValue() >> 7);
-        mIndex->setValue(mStack->getValue());
+        (*mStack)--;
+        mFlags->Zero = (**mStack == 0);
+        mFlags->Negative = (**mStack >> 7);
+        mIndex->setValue(**mStack);
+        (*mStack)++;
     }
 };
 

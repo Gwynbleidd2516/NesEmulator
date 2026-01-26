@@ -9,22 +9,24 @@ class TransferToStack : public IInstruction
 {
 private:
     Index *mIndex;
-    StackPointer *mStack;
+    uint8_t **mStack;
 
 public:
-    TransferToStack(Index *index, StackPointer *stack)
+    TransferToStack(Index *index, uint8_t **stack)
     {
         mIndex = index;
         mStack = stack;
     }
 
-    void code(vector<uint8_t>::iterator &) override
+    void code(uint8_t **) override
     {
     }
 
     void execute() override
     {
-        mStack->setValue(mIndex->getValue());
+        (*mStack)--;
+        **mStack = mIndex->getValue();
+        (*mStack)++;
     }
 };
 

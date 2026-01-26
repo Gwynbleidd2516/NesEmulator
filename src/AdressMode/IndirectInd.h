@@ -8,21 +8,21 @@ class IndirectX : public IAdressMode
 {
 private:
     uint8_t *mMem;
-    vector<uint8_t> *mPPU;
+    CPU *mPPU;
     Index *mReg;
 
 public:
-    IndirectX(vector<uint8_t> &ppu, Index *reg)
+    IndirectX(CPU &ppu, Index *reg)
     {
         mPPU = &ppu;
         mReg = reg;
     }
 
-    void code(vector<uint8_t>::iterator &it) override
+    void code(uint8_t **it) override
     {
-        uint16_t buff = mPPU->at((int)*(it + 1) + (int)mReg->getValue());
+        uint16_t buff = mPPU->at((int)**(it + 1) + (int)mReg->getValue());
         mMem = &mPPU->at(buff);
-        it++;
+        *it++;
     }
 
     void setValue(uint8_t val) override
@@ -45,21 +45,21 @@ class IndirectY : public IAdressMode
 {
 private:
     uint8_t *mMem;
-    vector<uint8_t> *mPPU;
+    CPU *mPPU;
     Index *mReg;
 
 public:
-    IndirectY(vector<uint8_t> &ppu, Index *reg)
+    IndirectY(CPU &ppu, Index *reg)
     {
         mPPU = &ppu;
         mReg = reg;
     }
 
-    void code(vector<uint8_t>::iterator &it) override
+    void code(uint8_t **it) override
     {
-        uint16_t buff = mPPU->at((int)*(it + 1));
+        uint16_t buff = mPPU->at((int)**(it + 1));
         mMem = &mPPU->at(buff) + mReg->getValue();
-        it++;
+        (*it)++;
     }
 
     void setValue(uint8_t val) override

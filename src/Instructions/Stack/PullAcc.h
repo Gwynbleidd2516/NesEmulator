@@ -10,24 +10,26 @@ class PullAcc : public IInstruction, public HasFlags
 {
 private:
     Accumulator *mAccumulator;
-    StackPointer *mStack;
+    uint8_t **mStack;
 
 public:
-    PullAcc(Accumulator *accumulator, StackPointer *stack, Flags *fl) : HasFlags(fl)
+    PullAcc(Accumulator *accumulator, uint8_t **stack, Flags *fl) : HasFlags(fl)
     {
         mAccumulator = accumulator;
         mStack = stack;
     }
 
-    void code(vector<uint8_t>::iterator &) override
+    void code(uint8_t **) override
     {
     }
 
     void execute() override
     {
-        mFlags->Zero = (mStack->getValue() == 0);
-        mFlags->Negative = (mStack->getValue() >> 7);
-        mAccumulator->setValue(mStack->pull());
+        (*mStack)--;
+        mFlags->Zero = (**mStack == 0);
+        mFlags->Negative = (**mStack >> 7);
+        mAccumulator->setValue(**mStack);
+        (**mStack) = 0;
         // mAccumulator->operator=(mStack->pull());
     }
 };

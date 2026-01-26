@@ -7,20 +7,23 @@
 class Brk : public Jump, public HasFlags
 {
 public:
-    Brk(vector<uint8_t>::iterator begin, IAdressMode *adressMode, StackPointer *SP, Flags *fl) : Jump(begin, adressMode, SP), HasFlags(fl)
+    Brk(CPU *begin, IAdressMode *adressMode, uint8_t **SP, Flags *fl) : Jump(begin, adressMode, SP), HasFlags(fl)
     {
     }
 
     void execute() override
     {
-        uint16_t buf = *mPC - mBegin;
-        mSP->push(buf >> 8);
-        mSP->push(buf & 0xFF);
+        uint16_t buf = *mPC - (uint8_t *)mBegin;
+        **mSP = buf >> 8;
+        (*mSP)++;
+        **mSP = buf & 0xFF;
+        (*mSP)++;
         mFlags->Interrupt = true;
         Flags a = *mFlags;
         a.Break = true;
-        mSP->push(a);
-        *mPC = mBegin + 0xFFFE;
+        (**mSP) = a;
+        (*mSP)++;
+        *mPC = (uint8_t *)mBegin + 0xFFFE;
     }
 };
 

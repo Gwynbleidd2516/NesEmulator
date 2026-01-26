@@ -9,10 +9,10 @@ private:
     uint8_t mImm;
 
 public:
-    void code(vector<uint8_t>::iterator &it) override
+    void code(uint8_t **it) override
     {
-        it++;
-        mImm = *it;
+        (*it)++;
+        mImm = **it;
     }
 
     void setValue(uint8_t val) override

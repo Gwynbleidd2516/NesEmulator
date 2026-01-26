@@ -7,19 +7,19 @@ class Indirect : public IAdressMode
 {
 private:
     uint8_t *mMem;
-    vector<uint8_t> *mPPU;
+    CPU *mPPU;
 
 public:
-    Indirect(vector<uint8_t> &ppu)
+    Indirect(CPU &ppu)
     {
         mPPU = &ppu;
     }
 
-    void code(vector<uint8_t>::iterator &it) override
+    void code(uint8_t **it) override
     {
-        it++;
-        mMem = &mPPU->at(mPPU->at(from8to16(*it, *(it + 1))));
-        it++;
+        (*it)++;
+        mMem = &mPPU->at(mPPU->at(from8to16(**it, **(it + 1))));
+        (*it)++;
     }
 
     void setValue(uint8_t val) override
