@@ -23,6 +23,7 @@ private:
     // vector<uint8_t> mCode;
     // vector<uint8_t> mData;
     NesFile mNesFile;
+    CPU mCPU;
     vector<uint8_t> mPPU;
     Registers mRegisters;
 
