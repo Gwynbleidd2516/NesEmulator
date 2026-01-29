@@ -7,11 +7,11 @@
 class Branch : public HasAdressMode, public HasFlags
 {
 protected:
-    vector<uint8_t>::iterator *mPC;
+    uint8_t **mPC;
     // vector<uint8_t>::iterator mBegin;
 
 public:
-    Branch(vector<uint8_t>::iterator *it, IAdressMode *adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
+    Branch(uint8_t **it, IAdressMode *adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
     {
         // mBegin = begin;
         mPC = it;

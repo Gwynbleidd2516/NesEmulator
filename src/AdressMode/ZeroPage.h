@@ -17,7 +17,7 @@ public:
 
     void code(uint8_t **it) override
     {
-        *it++;
+        (*it)++;
         mMem = &mPPU->at(**it);
     }
 
@@ -30,11 +30,6 @@ public:
     {
         return *mMem;
     }
-
-    // uint8_t *getResult() override
-    // {
-    //     return mMem;
-    // }
 };
 
 class ZeroPageInd : public IAdressMode
@@ -66,11 +61,6 @@ public:
     {
         return *mMem;
     }
-
-    // uint8_t *getResult() override
-    // {
-    //     return mMem;
-    // }
 };
 
 #endif

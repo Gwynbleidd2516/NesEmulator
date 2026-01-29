@@ -10,6 +10,7 @@ protected:
     uint8_t **mPC;
     CPU *mBegin;
     uint8_t **mSP;
+    int mJump;
 
 public:
     Jump(CPU *begin, IAdressMode *adressMode, uint8_t **SP) : HasAdressMode(adressMode)
@@ -20,6 +21,7 @@ public:
 
     void code(uint8_t **it) override
     {
+        ((Absolute *)mAdressMode)->setJumpPointer(&mJump);
         mAdressMode->code(it);
         mPC = it;
     }

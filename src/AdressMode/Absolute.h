@@ -8,16 +8,20 @@ class Absolute : public IAdressMode
 private:
     uint8_t *mMem;
     CPU *mPPU;
+    int *mJump;
 
 public:
     Absolute(CPU &ppu)
     {
         mPPU = &ppu;
+        mJump = nullptr;
     }
 
     void code(uint8_t **it) override
     {
         (*it)++;
+        if (mJump)
+            *mJump = from8to16(**it, *(*it + 1));
         mMem = &(mPPU->at(from8to16(**it, *(*it + 1))));
         (*it)++;
     }
@@ -32,10 +36,10 @@ public:
         return *mMem;
     }
 
-    // uint8_t *getResult() override
-    // {
-    //     return mMem;
-    // }
+    void setJumpPointer(int *j)
+    {
+        mJump = j;
+    }
 
 private:
     uint16_t from8to16(uint8_t a1, uint8_t a2)

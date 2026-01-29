@@ -10,7 +10,7 @@ public:
 
     void execute() override
     {
-        *mPC = (uint8_t *)mBegin + mAdressMode->getValue();
+        *mPC = (uint8_t *)mBegin + mJump - 1;
     }
 };
 

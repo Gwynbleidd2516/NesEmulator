@@ -8,6 +8,7 @@ class Indirect : public IAdressMode
 private:
     uint8_t *mMem;
     CPU *mPPU;
+    uint8_t *mJump;
 
 public:
     Indirect(CPU &ppu)
@@ -18,6 +19,7 @@ public:
     void code(uint8_t **it) override
     {
         (*it)++;
+        *mJump = from8to16(**it, *(*it + 1));
         mMem = &mPPU->at(mPPU->at(from8to16(**it, **(it + 1))));
         (*it)++;
     }
@@ -30,6 +32,11 @@ public:
     uint8_t getValue() const override
     {
         return *mMem;
+    }
+
+    void setJumpPointer(uint8_t *j)
+    {
+        mJump = j;
     }
 
 private:
