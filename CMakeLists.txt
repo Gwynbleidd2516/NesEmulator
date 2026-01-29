@@ -4,6 +4,17 @@ set(APP_NAME NesEmu)
 
 project(main)
 
+include(FetchContent)
+
+FetchContent_Declare(SFML
+    GIT_REPOSITORY https://github.com/SFML/SFML.git
+    GIT_TAG 3.0.2
+    GIT_SHALLOW ON
+    EXCLUDE_FROM_ALL
+    SYSTEM)
+
+FetchContent_MakeAvailable(SFML)
+
 MACRO(HEADER_DIRECTORIES return_list search_path)
     # Find all header files recursively
     file(GLOB_RECURSE new_list "${search_path}/*.h" "${search_path}/*.hpp")
@@ -38,6 +49,8 @@ message(--INCLUDE-->${MY_INCLUDES})
 add_executable(main ${TARGET_SRC} ${TARGET_HEADERS})
 
 target_include_directories(main PUBLIC ${MY_INCLUDES})
+
+target_link_libraries(main PRIVATE SFML::Graphics)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/$<0:>)
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${APP_NAME})
