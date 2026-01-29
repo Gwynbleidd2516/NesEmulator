@@ -6,7 +6,6 @@
 #include <map>
 #include <functional>
 #include "IInstruction.h"
-// #include "IAdressMode.h"
 #include <memory>
 using namespace std;
 
@@ -19,9 +18,6 @@ using namespace std;
 class NesProgram
 {
 private:
-    // Header mHeader;
-    // vector<uint8_t> mCode;
-    // vector<uint8_t> mData;
     NesFile mNesFile;
     CPU mCPU;
     vector<uint8_t> mPPU;
@@ -38,9 +34,6 @@ public:
     void step();
 
     bool eof() const;
-
-    // private:
-    // static map<uint8_t, function<void(FUNC_ARGS)>> mComands;
 };
 
 #endif
