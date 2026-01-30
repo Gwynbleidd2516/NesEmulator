@@ -3,6 +3,7 @@
 
 #include <stack>
 #include <vector>
+#include "PPURegister.h"
 using namespace std;
 
 #pragma pack(push, 1)
@@ -43,14 +44,14 @@ struct CPU
 
     struct PPURegisters
     {
-        uint8_t PPUCTRL;
-        uint8_t PPUMASK;
-        uint8_t PPUSTATUS;
-        uint8_t OAMADDR;
-        uint8_t OAMDATA;
-        uint8_t PPUSCROLL;
-        uint8_t PPUADDR;
-        uint8_t PPUDATA;
+        PPURegister PPUCTRL;
+        PPURegister PPUMASK;
+        PPURegister PPUSTATUS;
+        PPURegister OAMADDR;
+        PPURegister OAMDATA;
+        PPURegister PPUSCROLL;
+        PPURegister PPUADDR;
+        PPURegister PPUDATA;
     };
 
     PPURegisters mPPURegs[1024];
