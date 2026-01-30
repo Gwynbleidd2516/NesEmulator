@@ -20,9 +20,9 @@ public:
 
     void code(uint8_t **it) override
     {
-        uint16_t buff = mPPU->at((int)**(it + 1) + (int)mReg->getValue());
+        (*it)++;
+        uint16_t buff = mPPU->at((int)**(it) + (int)mReg->getValue());
         mMem = &mPPU->at(buff);
-        *it++;
     }
 
     void setValue(uint8_t val) override
@@ -57,9 +57,9 @@ public:
 
     void code(uint8_t **it) override
     {
-        uint16_t buff = mPPU->at((int)**(it + 1));
-        mMem = &mPPU->at(buff) + mReg->getValue();
         (*it)++;
+        uint16_t buff = mPPU->at((int)**(it));
+        mMem = &mPPU->at(buff) + mReg->getValue();
     }
 
     void setValue(uint8_t val) override
