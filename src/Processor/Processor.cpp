@@ -95,7 +95,6 @@ void Processor::doStep()
     mCPU.mPPURegs[0].PPUSTATUS.setBit(7, true);
     uint8_t buf = *mRegisters.pc;
     shared_ptr<IInstruction> iter = mInstructions[buf >> 0x4][buf % 0x10];
-    cout << typeid(*iter.get()).name() << endl;
     iter->code(&mRegisters.pc);
     iter->execute();
     (mRegisters.pc)++;
