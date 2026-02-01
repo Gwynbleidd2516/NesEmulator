@@ -37,20 +37,16 @@ HEADER_DIRECTORIES(MY_INCLUDES src)
 
 file(GLOB TARGET_SRC "src/*.cpp" "src/*/*.cpp")
 file(GLOB TARGET_HEADERS "src/*.h" "src/*/*.h" "src/*/*/*.h")
-# file(GLOB TARGET_HEADERS_2 "src/*/*.h")
-# file(GLOB TARGET_HEADERS_3 "src/*/*/*.h")
 
 message(--TARGET_SRC-->${TARGET_SRC})
 message(--TARGET_HEADERS-->${TARGET_HEADERS})
 message(--INCLUDE-->${MY_INCLUDES})
-# message(--TARGET_HEADERS_2-->${TARGET_HEADERS_2})
-# message(--TARGET_HEADERS_3-->${TARGET_HEADERS_3})
 
 add_executable(main ${TARGET_SRC} ${TARGET_HEADERS})
 
 target_include_directories(main PUBLIC ${MY_INCLUDES})
 
-target_link_libraries(main PRIVATE SFML::Graphics)
+target_link_libraries(main PRIVATE SFML::System SFML::Window SFML::Graphics SFML::Audio)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/$<0:>)
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${APP_NAME})
