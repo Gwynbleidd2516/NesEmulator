@@ -27,7 +27,7 @@ public:
         uint8_t mask = pow(2, i);
         uint8_t buf = mMemory & mask;
 
-        return buf >>= i;
+        return buf >> i;
     }
 
     void setBit(uint8_t i, bool val)
