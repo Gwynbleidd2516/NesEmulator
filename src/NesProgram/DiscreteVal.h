@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <math.h>
 
-class PPURegister
+class DiscreteVal
 {
 private:
     uint8_t mMemory = 0;
