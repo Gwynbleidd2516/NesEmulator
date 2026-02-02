@@ -13,7 +13,6 @@ public:
     void execute() override
     {
         uint16_t buf = *mPC - (uint8_t *)mBegin;
-        cout << buf << endl;
         **mSP = buf >> 8;
         (*mSP)++;
         **mSP = (buf & 0xFF);
