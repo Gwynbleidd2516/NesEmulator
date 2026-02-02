@@ -3,7 +3,7 @@
 
 #include <stack>
 #include <vector>
-#include "PPURegister.h"
+#include "DiscreteVal.h"
 using namespace std;
 
 #pragma pack(push, 1)
@@ -11,23 +11,31 @@ struct CPU
 {
     struct RAM
     {
-        uint8_t zeroPage[256];
-        uint8_t stack[256];
-        uint8_t OAM[1536];
+        uint8_t zeroPage[416];
+        uint8_t stack[96];
+        struct OAM
+        {
+            uint8_t y;
+            uint8_t tile;
+            DiscreteVal attribute;
+            uint8_t x;
+        };
+        OAM oam[64];
+        uint8_t other[1280];
     };
 
     RAM mMirror[4];
 
     struct PPURegisters
     {
-        PPURegister PPUCTRL;
-        PPURegister PPUMASK;
-        PPURegister PPUSTATUS;
-        PPURegister OAMADDR;
-        PPURegister OAMDATA;
-        PPURegister PPUSCROLL;
-        PPURegister PPUADDR;
-        PPURegister PPUDATA;
+        DiscreteVal PPUCTRL;
+        DiscreteVal PPUMASK;
+        DiscreteVal PPUSTATUS;
+        DiscreteVal OAMADDR;
+        DiscreteVal OAMDATA;
+        DiscreteVal PPUSCROLL;
+        DiscreteVal PPUADDR;
+        DiscreteVal PPUDATA;
     };
 
     PPURegisters mPPURegs[1024];
