@@ -3,27 +3,17 @@
 
 #include <string>
 #include <vector>
-#include <map>
-#include <functional>
-#include "IInstruction.h"
-#include <memory>
 using namespace std;
 
-#include "Registers.h"
-#include "Flags.h"
-#include "Structs.h"
-
-#define FUNC_ARGS vector<uint8_t>::iterator &it, Registers &reg, vector<uint8_t> &ppu
+#include "Processor.h"
+#include "Render.h"
 
 class NesProgram
 {
 private:
-    NesFile mNesFile;
-    CPU mCPU;
-    vector<uint8_t> mPPU;
-    Registers mRegisters;
+    Processor mProcessor;
+    Render mRender;
 
-    vector<uint8_t>::iterator mCodeIt;
     vector<vector<shared_ptr<IInstruction>>> mInstructions;
 
 public:
@@ -33,7 +23,7 @@ public:
 
     void step();
 
-    bool eof() const;
+    bool isEnd() const;
 };
 
 #endif
