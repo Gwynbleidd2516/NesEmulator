@@ -6,6 +6,14 @@
 #include "DiscreteVal.h"
 using namespace std;
 
+struct OAM
+{
+    uint8_t y;
+    uint8_t tile;
+    DiscreteVal attribute;
+    uint8_t x;
+};
+
 #pragma pack(push, 1)
 struct CPU
 {
@@ -13,13 +21,6 @@ struct CPU
     {
         uint8_t zeroPage[416];
         uint8_t stack[96];
-        struct OAM
-        {
-            uint8_t y;
-            uint8_t tile;
-            DiscreteVal attribute;
-            uint8_t x;
-        };
         OAM oam[64];
         uint8_t other[1280];
     };
