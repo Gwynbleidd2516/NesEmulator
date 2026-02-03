@@ -11,14 +11,6 @@ using namespace sf;
 #include "DiscreteVal.h"
 #include "Structs.h"
 
-struct OAM
-{
-    uint8_t y;
-    uint8_t tile;
-    DiscreteVal attribute;
-    uint8_t x;
-};
-
 class Render
 {
 private:
