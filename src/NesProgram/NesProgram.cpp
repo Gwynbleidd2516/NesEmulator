@@ -3,6 +3,7 @@
 
 NesProgram::NesProgram()
 {
+    mProcessor.setOAM(mRender.getOAM());
 }
 
 void NesProgram::loadFile(string path)
