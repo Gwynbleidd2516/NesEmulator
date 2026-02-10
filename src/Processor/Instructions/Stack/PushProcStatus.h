@@ -2,8 +2,6 @@
 #define PUSH_PROCESSOR_STATUS
 
 #include "IInstruction.h"
-#include "Structs.h"
-#include "StackPointer.h"
 
 class PushProcStatus : public IInstruction
 {

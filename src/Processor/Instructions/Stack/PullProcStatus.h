@@ -2,8 +2,6 @@
 #define PULL_PROCESSOR_STATUS
 
 #include "IInstruction.h"
-#include "Structs.h"
-#include "StackPointer.h"
 
 class PullProcStatus : public IInstruction
 {
