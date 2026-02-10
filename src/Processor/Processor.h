@@ -6,7 +6,7 @@
 #include "IInstruction.h"
 #include "Registers.h"
 #include "Flags.h"
-#include "Structs.h"
+#include "Cpu.h"
 using namespace std;
 
 class Processor
@@ -24,6 +24,14 @@ public:
     void doStep();
 
     bool eof() const;
+
+private:
+    uint16_t from8to16(uint8_t a1, uint8_t a2)
+    {
+        uint16_t ans = a2;
+        ans *= 256;
+        return ans + a1;
+    }
 };
 
 #endif
