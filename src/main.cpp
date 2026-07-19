@@ -1,23 +1,25 @@
 #include "NesProgram.h"
 #include <iostream>
-using namespace std;
 
-int main()
+int main(int argv, char **argc)
 {
     try
     {
-        NesProgram pr;
-        pr.loadFile("example.nes");
-        // pr.loadFile("Super Mario Bros.nes");
-
-        while (!pr.eof())
+        if (argv == 2)
         {
-            pr.step();
+            NesProgram pr;
+            pr.loadFile(argc[1]);
+
+            while (!pr.isEnd())
+            {
+                pr.step();
+            }
         }
     }
     catch (const std::exception &e)
     {
         std::cerr << e.what() << '\n';
+        return 1;
     }
     return 0;
 }
