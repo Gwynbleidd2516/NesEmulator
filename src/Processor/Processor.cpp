@@ -50,8 +50,8 @@ Processor::Processor()
 {
     mRegisters.pc = &mCPU.rom[0];
     mRegisters.sp = &mCPU.mMirror[0].stack[0];
-    mCPU.mPPURegs[0].PPUCTRL.setBit(0, true);
-    mCPU.mPPURegs[0].PPUSTATUS.setBit(6, true);
+    mCPU.mPPURegs->ppuctrl.nmi_enable = true;
+    mCPU.mPPURegs->ppustatus.vblank = true;
     mInstructions =
         {
             //          0        1        2
@@ -92,7 +92,7 @@ void Processor::loadFromFile(ifstream &file, size_t size)
 
 void Processor::doStep()
 {
-    mCPU.mPPURegs[0].PPUSTATUS.setBit(7, true);
+    mCPU.mPPURegs->ppustatus.vblank = true;
     uint8_t buf = *mRegisters.pc;
     shared_ptr<IInstruction> iter = mInstructions[buf >> 0x4][buf % 0x10];
     iter->code(&mRegisters.pc);
