@@ -80,14 +80,10 @@ void Render::loadFromFile(ifstream &file, size_t size)
     for (size_t i = 0; i < 256; i++)
     {
         int a = i / 16;
-        Sprite sp(mTextueBank1, IntRect({(i % 16) * 8, (int)(i / 16) * 8}, {8, 8}));
-        mPatternTable1.push_back(sp);
-    }
-    for (size_t i = 0; i < 256; i++)
-    {
-        int a = i / 16;
-        Sprite sp(mTextueBank2, IntRect({(i % 16) * 8, (int)(i / 16) * 8}, {8, 8}));
-        mPatternTable2.push_back(sp);
+        Sprite sp1(mTextueBank1, IntRect({(i % 16) * 8, (int)(i / 16) * 8}, {8, 8}));
+        Sprite sp2(mTextueBank2, IntRect({(i % 16) * 8, (int)(i / 16) * 8}, {8, 8}));
+        mPatternTable1.push_back(sp1);
+        mPatternTable2.push_back(sp2);
     }
 }
 
