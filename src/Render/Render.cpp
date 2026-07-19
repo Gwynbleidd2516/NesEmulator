@@ -1,5 +1,6 @@
 #include "Render.h"
 #include <iostream>
+#include <DiscreteVal.h>
 
 Render::Render()
 {

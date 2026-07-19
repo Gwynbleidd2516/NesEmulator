@@ -3,7 +3,6 @@
 
 #include <stack>
 #include <vector>
-#include "DiscreteVal.h"
 using namespace std;
 
 struct OAM

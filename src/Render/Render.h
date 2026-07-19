@@ -8,7 +8,6 @@ using namespace std;
 #include <SFML/OpenGL.hpp>
 using namespace sf;
 
-#include "DiscreteVal.h"
 #include "Cpu.h"
 
 class Render
