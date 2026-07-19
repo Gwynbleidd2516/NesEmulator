@@ -5,20 +5,15 @@
 
 class SetFlag : public IInstruction
 {
-private:
-    bool *mDest;
+protected:
+    Flags *mDest;
     bool mState;
 
 public:
-    SetFlag(bool *dest, bool state)
+    SetFlag(Flags *dest, bool state)
     {
         mDest = dest;
         mState = state;
-    }
-
-    void execute() override
-    {
-        *mDest = mState;
     }
 
     void code(uint8_t **) override

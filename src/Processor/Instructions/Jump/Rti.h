@@ -15,7 +15,7 @@ public:
     void execute() override
     {
         Flags a;
-        a = **mSP;
+        memcpy(&a, *mSP, sizeof(Flags));
         (*mSP)--;
         a.Break = false;
         a.Interrupt = false;

@@ -23,7 +23,7 @@ public:
     void execute() override
     {
         (*mStack)--;
-        *mFlags = **mStack;
+        memcpy(mFlags, *mStack, sizeof(Flags));
     }
 };
 

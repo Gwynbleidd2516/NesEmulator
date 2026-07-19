@@ -22,7 +22,7 @@ public:
 
     void execute() override
     {
-        **mStack = (static_cast<uint8_t>(*mFlags));
+        memcpy(*mStack, mFlags, sizeof(Flags));
         (*mStack)++;
     }
 };

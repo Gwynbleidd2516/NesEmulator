@@ -21,7 +21,7 @@ public:
         mFlags->Interrupt = true;
         Flags a = *mFlags;
         a.Break = true;
-        (**mSP) = a;
+        memcpy(*mSP, &a, sizeof(Flags));
         (*mSP)++;
         *mPC = (uint8_t *)mBegin + 0xFFFE;
     }
