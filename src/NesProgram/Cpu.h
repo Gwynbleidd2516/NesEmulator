@@ -9,8 +9,12 @@ using namespace std;
 struct OAM
 {
     uint8_t y;
-    uint8_t tile;
-    DiscreteVal attribute;
+    uint8_t bank : 1;
+    uint8_t tile : 7;
+    uint8_t pallete : 2;
+    uint8_t unimplemented : 3;
+    bool flipHorizontally : 1;
+    bool flipVertically : 1;
     uint8_t x;
 };
 
