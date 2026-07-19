@@ -9,7 +9,7 @@ using namespace std;
 using namespace sf;
 
 #include "DiscreteVal.h"
-#include "Structs.h"
+#include "Cpu.h"
 
 class Render
 {
