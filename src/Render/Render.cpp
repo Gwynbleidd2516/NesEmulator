@@ -106,17 +106,18 @@ void Render::show()
 
     for (size_t i = 0; i < 64; i++)
     {
-        bool table2 = mOAM[i].tile % 2;
-        if (table2)
+        if (mOAM[i].bank == 1)
         {
-            Sprite buf = mPatternTable1[mOAM[i].tile >> 1];
+            Sprite buf = mPatternTable1[mOAM[i].tile];
             buf.setPosition({(float)mOAM[i].x, (float)mOAM[i].y});
+            buf.setScale(Vector2f(-1.0f + mOAM[i].flipHorizontally * 2.0f, -1.0f + mOAM[i].flipVertically * 2.0f));
             mWindow.draw(buf);
         }
         else
         {
-            Sprite buf = mPatternTable2[mOAM[i].tile >> 1];
+            Sprite buf = mPatternTable2[mOAM[i].tile];
             buf.setPosition({(float)mOAM[i].x, (float)mOAM[i].y});
+            buf.setScale(Vector2f(-1.0f + mOAM[i].flipHorizontally * 2.0f, -1.0f + mOAM[i].flipVertically * 2.0f));
             mWindow.draw(buf);
         }
     }
