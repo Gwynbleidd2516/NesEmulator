@@ -73,17 +73,9 @@ using OAMADDR = uint8_t;
 
 using OAMDATA = uint8_t;
 
-struct PPUSCROLL 
-{
-    uint8_t x_scroll;
-    uint8_t y_scroll;
-}
+using PPUSCROLL = uint8_t;
 
-struct PPUADDR
-{
-    uint8_t high;
-    uint8_t low;
-}
+using PPUADDR = uint8_t;
 
 using PPUDATA = uint8_t;
 
@@ -100,7 +92,7 @@ struct PPURegisters
 };
 
 #pragma pack(push, 1)
-struct CPU
+struct MemoryMap
 {
     struct RAM
     {
@@ -153,5 +145,20 @@ struct CPU
 };
 
 #pragma pack(pop)
+
+struct CPU
+{
+
+    MemoryMap memoryMap;
+    uint8_t &operator[](size_t i)
+    {
+        return memoryMap[i];
+    }
+
+    uint8_t &at(size_t i)
+    {
+        return memoryMap.at(i);
+    }
+};
 
 #endif

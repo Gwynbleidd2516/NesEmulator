@@ -54,10 +54,10 @@
 
 Processor::Processor()
 {
-    mRegisters.pc = &mCPU.rom[0];
-    mRegisters.sp = &mCPU.mMirror[0].stack[0];
-    mCPU.mPPURegs->ppuctrl.nmi_enable = true;
-    mCPU.mPPURegs->ppustatus.vblank = true;
+    mRegisters.pc = &mCPU.memoryMap.rom[0];
+    mRegisters.sp = &mCPU.memoryMap.mMirror[0].stack[0];
+    mCPU.memoryMap.mPPURegs->ppuctrl.nmi_enable = true;
+    mCPU.memoryMap.mPPURegs->ppustatus.vblank = true;
     mInstructions =
         {
             //          0        1        2
@@ -93,12 +93,12 @@ Processor::Processor()
 
 void Processor::loadFromFile(ifstream &file, size_t size)
 {
-    file.read(reinterpret_cast<char *>(&mCPU.rom), sizeof(CPU::rom) * size);
+    file.read(reinterpret_cast<char *>(&mCPU.memoryMap.rom), sizeof(MemoryMap::rom) * size);
 }
 
 void Processor::doStep()
 {
-    mCPU.mPPURegs->ppustatus.vblank = true;
+    mCPU.memoryMap.mPPURegs->ppustatus.vblank = true;
     uint8_t buf = *mRegisters.pc;
     shared_ptr<IInstruction> iter = mInstructions[buf >> 0x4][buf % 0x10];
     iter->code(&mRegisters.pc);
@@ -108,5 +108,5 @@ void Processor::doStep()
 
 bool Processor::eof() const
 {
-    return mRegisters.pc == &mCPU.rom[32767];
+    return mRegisters.pc == &mCPU.memoryMap.rom[32767];
 }
