@@ -73,7 +73,11 @@ using OAMADDR = uint8_t;
 
 using OAMDATA = uint8_t;
 
-using PPUSCROLL = uint8_t;
+struct PPUSCROLL 
+{
+    uint8_t x_scroll;
+    uint8_t y_scroll;
+}
 
 struct PPUADDR
 {
