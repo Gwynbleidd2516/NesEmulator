@@ -202,6 +202,34 @@ struct CPU
             break;
         }
     }
+
+    uint8_t read(size_t i)
+    {
+        uint8_t ans;
+        switch (i)
+        {
+        case 0x2002:
+            memoryMap.mPPURegs->ppustatus.vblank = false;
+            ppuaddrLatch = false;
+            ppuscrollLatch = false;
+            return memoryMap.mPPURegs->ppustatus.raw;
+            break;
+
+        case 0x2004:
+            return memoryMap[0x200 + memoryMap.mPPURegs->oamaddr++];
+            break;
+
+        case 0x2007:
+            ans = ppu->at(memoryMap.mPPURegs->ppuaddr);
+            memoryMap.mPPURegs->ppuaddr += 1 + memoryMap.mPPURegs->ppuctrl.increment * 31;
+            return ans;
+            break;
+
+        default:
+            return at(i);
+            break;
+        }
+    }
 };
 
 #endif
