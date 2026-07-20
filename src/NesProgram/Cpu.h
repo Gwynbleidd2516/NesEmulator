@@ -75,7 +75,11 @@ using OAMDATA = uint8_t;
 
 using PPUSCROLL = uint8_t;
 
-using PPUADDR = uint8_t;
+struct PPUADDR
+{
+    uint8_t high;
+    uint8_t low;
+}
 
 using PPUDATA = uint8_t;
 
