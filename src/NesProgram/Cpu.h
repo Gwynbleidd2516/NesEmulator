@@ -5,6 +5,8 @@
 #include <vector>
 using namespace std;
 
+#include "Ppu.h"
+
 struct OAM
 {
     uint8_t y;
@@ -148,6 +150,13 @@ struct MemoryMap
 
 struct CPU
 {
+    uint8_t ppuscrolly;
+    bool ppuscrollLatch = false;
+
+    uint8_t ppuaddr_write : 6;
+    bool ppuaddrLatch = false;
+
+    PPU *ppu;
 
     MemoryMap memoryMap;
     uint8_t &operator[](size_t i)
@@ -158,6 +167,40 @@ struct CPU
     uint8_t &at(size_t i)
     {
         return memoryMap.at(i);
+    }
+
+    void write(size_t i, uint8_t value)
+    {
+        switch (i)
+        {
+        case 0x2004:
+            memoryMap[0x200 + memoryMap.mPPURegs->oamaddr++] = value;
+            break;
+
+        case 0x2005:
+            if (ppuscrollLatch)
+                memoryMap[i] = value;
+            else
+                ppuscrolly = value;
+            ppuscrollLatch = !ppuscrollLatch;
+            break;
+
+        case 0x2006:
+            if (ppuaddrLatch)
+                memoryMap[i] = value;
+            else
+                ppuaddr_write = value;
+            ppuaddrLatch = !ppuaddrLatch;
+            break;
+
+        case 0x2007:
+            ppu->at(memoryMap.mPPURegs->ppuaddr);
+            memoryMap.mPPURegs->ppuaddr += 1 + memoryMap.mPPURegs->ppuctrl.increment * 31;
+            break;
+        default:
+            at(i) = value;
+            break;
+        }
     }
 };
 
