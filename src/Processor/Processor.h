@@ -9,6 +9,10 @@
 #include "Cpu.h"
 using namespace std;
 
+#define NMI_INTERRUPT_LOACTION 0x800A
+#define RESET_INTERRUPT_LOACTION 0x800C
+#define IRQ_INTERRUPT_LOACTION 0x800E
+
 class Processor
 {
 private:
@@ -25,13 +29,7 @@ public:
 
     bool eof() const;
 
-private:
-    uint16_t from8to16(uint8_t a1, uint8_t a2)
-    {
-        uint16_t ans = a2;
-        ans *= 256;
-        return ans + a1;
-    }
+    void reset();
 };
 
 #endif

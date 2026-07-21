@@ -110,3 +110,11 @@ bool Processor::eof() const
 {
     return mRegisters.pc == &mCPU.memoryMap.rom[32767];
 }
+
+void Processor::reset()
+{
+    Jmp j(mCPU, new Indirect(mCPU), &mRegisters.sp);
+    mRegisters.pc = &mCPU[RESET_INTERRUPT_LOACTION - 1];
+    j.code(&mRegisters.pc);
+    j.execute();
+}
