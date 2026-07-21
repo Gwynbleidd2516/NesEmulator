@@ -3,11 +3,12 @@
 
 #include "IAdressMode.h"
 #include "Index.h"
+#include "Struct16_t.h"
 
 class IndirectX : public IAdressMode
 {
 private:
-    uint8_t *mMem;
+    uint8_t mLocation;
     CPU *mPPU;
     Index *mReg;
 
@@ -21,30 +22,27 @@ public:
     void code(uint8_t **it) override
     {
         (*it)++;
-        uint16_t buff = mPPU->at((int)**(it) + (int)mReg->getValue());
-        mMem = &mPPU->at(buff);
+        Struct16_t buf = {.h = mPPU->read(**(it) + mReg->getValue()),
+                          .l = mPPU->read(**(it) + mReg->getValue() + 1)};
+
+        mLocation = buf.raw;
     }
 
     void setValue(uint8_t val) override
     {
-        *mMem = val;
+        mPPU->write(mLocation, val);
     }
 
     uint8_t getValue() const override
     {
-        return *mMem;
+        return mPPU->read(mLocation);
     }
-
-    // uint8_t *getResult() override
-    // {
-    //     return mMem;
-    // }
 };
 
 class IndirectY : public IAdressMode
 {
 private:
-    uint8_t *mMem;
+    uint8_t mLocation;
     CPU *mPPU;
     Index *mReg;
 
@@ -58,24 +56,21 @@ public:
     void code(uint8_t **it) override
     {
         (*it)++;
-        uint16_t buff = mPPU->at((int)**(it));
-        mMem = &mPPU->at(buff) + mReg->getValue();
+        Struct16_t buf = {.h = mPPU->read(**(it)),
+                          .l = mPPU->read(**(it) + 1)};
+
+        mLocation = buf.raw + mReg->getValue();
     }
 
     void setValue(uint8_t val) override
     {
-        *mMem = val;
+        mPPU->write(mLocation, val);
     }
 
     uint8_t getValue() const override
     {
-        return *mMem;
+        return mPPU->read(mLocation);
     }
-
-    // uint8_t *getResult() override
-    // {
-    //     return mMem;
-    // }
 };
 
 #endif

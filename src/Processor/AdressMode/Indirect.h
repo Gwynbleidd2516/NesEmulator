@@ -6,7 +6,7 @@
 class Indirect : public IAdressMode
 {
 private:
-    uint8_t *mMem;
+    uint16_t mLocation;
     CPU *mPPU;
     uint8_t *mJump;
 
@@ -19,32 +19,26 @@ public:
     void code(uint8_t **it) override
     {
         (*it)++;
-        *mJump = from8to16(**it, *(*it + 1));
-        mMem = &mPPU->at(mPPU->at(from8to16(**it, **(it + 1))));
+        Struct16_t buf = {.h = **it, .l = *(*it + 1)};
+        *mJump = buf.raw;
+        Struct16_t buf2 = {.h = mPPU->read(buf.raw), .l = mPPU->read(buf.raw + 1)};
+        mLocation = buf2.raw;
         (*it)++;
     }
 
     void setValue(uint8_t val) override
     {
-        *mMem = val;
+        mPPU->write(mLocation, val);
     }
 
     uint8_t getValue() const override
     {
-        return *mMem;
+        return mPPU->read(mLocation);
     }
 
     void setJumpPointer(uint8_t *j)
     {
         mJump = j;
-    }
-
-private:
-    uint16_t from8to16(uint8_t a1, uint8_t a2)
-    {
-        uint16_t ans = a2;
-        ans *= 256;
-        return ans + a1;
     }
 };
 

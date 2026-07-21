@@ -2,11 +2,12 @@
 #define ABSOLUTE
 
 #include "IAdressMode.h"
+#include "Struct16_t.h"
 
 class Absolute : public IAdressMode
 {
 private:
-    uint8_t *mMem;
+    uint16_t mLocation;
     CPU *mPPU;
     int *mJump;
 
@@ -20,40 +21,33 @@ public:
     void code(uint8_t **it) override
     {
         (*it)++;
+        Struct16_t buf = {.h = **it, .l = *(*it + 1)};
         if (mJump)
-            *mJump = from8to16(**it, *(*it + 1));
-        mMem = &(mPPU->at(from8to16(**it, *(*it + 1))));
+            *mJump = buf.raw;
+        mLocation = buf.raw;
         (*it)++;
     }
 
     void setValue(uint8_t val) override
     {
-        *mMem = val;
+        mPPU->write(mLocation, val);
     }
 
     uint8_t getValue() const override
     {
-        return *mMem;
+        return mPPU->read(mLocation);
     }
 
     void setJumpPointer(int *j)
     {
         mJump = j;
     }
-
-private:
-    uint16_t from8to16(uint8_t a1, uint8_t a2)
-    {
-        uint16_t ans = a2;
-        ans *= 256;
-        return ans + a1;
-    }
 };
 
 class AbsoluteInd : public IAdressMode
 {
 private:
-    uint8_t *mMem;
+    uint16_t mLocation;
     CPU *mPPU;
     Index *mReg;
 
@@ -67,31 +61,19 @@ public:
     void code(uint8_t **it) override
     {
         (*it)++;
-
-        mMem = &mPPU->at(from8to16(**it, *(*it + 1)) + mReg->getValue());
+        Struct16_t buf = {.h = **it, .l = *(*it + 1)};
+        mLocation = buf.raw + mReg->getValue();
         (*it)++;
     }
 
     void setValue(uint8_t val) override
     {
-        *mMem = val;
+        mPPU->write(mLocation, val);
     }
 
     uint8_t getValue() const override
     {
-        return *mMem;
-    }
-    // uint8_t *getResult() override
-    // {
-    //     return mMem;
-    // }
-
-private:
-    uint16_t from8to16(uint8_t a1, uint8_t a2)
-    {
-        uint16_t ans = a2;
-        ans *= 256;
-        return ans + a1;
+        return mPPU->read(mLocation);
     }
 };
 
