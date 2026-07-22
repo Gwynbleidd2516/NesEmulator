@@ -24,6 +24,8 @@ public:
     void step();
 
     bool isEnd() const;
+
+    void reset();
 };
 
 #endif

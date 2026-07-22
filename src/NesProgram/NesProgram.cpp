@@ -48,3 +48,8 @@ bool NesProgram::isEnd() const
 {
     return mProcessor.eof() || !mRender.isOpen();
 }
+
+void NesProgram::reset()
+{
+    mProcessor.reset();
+}
