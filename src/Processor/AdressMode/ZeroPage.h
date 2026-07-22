@@ -23,13 +23,17 @@ public:
 
     void setValue(uint8_t val) override
     {
+#ifdef DO_LOGS
         Logs::GetInstance().message.append(format("${:x}; ", mLocation));
+#endif
         mPPU->write(mLocation, val);
     }
 
     uint8_t getValue() const override
     {
+#ifdef DO_LOGS
         Logs::GetInstance().message.append(format("{{${:x}}} {:x}; ", mLocation, mPPU->at(mLocation)));
+#endif
         return mPPU->read(mLocation);
     }
 };
@@ -56,13 +60,17 @@ public:
 
     void setValue(uint8_t val) override
     {
+#ifdef DO_LOGS
         Logs::GetInstance().message.append(format("${:x}; ", mLocation));
+#endif
         mPPU->write(mLocation, val);
     }
 
     uint8_t getValue() const override
     {
+#ifdef DO_LOGS
         Logs::GetInstance().message.append(format("{{${:x}}} {:x}; ", mLocation, mPPU->at(mLocation)));
+#endif
         return mPPU->read(mLocation);
     }
 };

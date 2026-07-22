@@ -56,7 +56,6 @@
 
 Processor::Processor()
 {
-    mRegisters.pc = &mCPU.memoryMap.rom[0];
     mRegisters.sp = &mCPU.memoryMap.mMirror[0].stack[0];
     mCPU.memoryMap.mPPURegs->ppuctrl.nmi_enable = true;
     mCPU.memoryMap.mPPURegs->ppustatus.vblank = true;
@@ -101,14 +100,18 @@ void Processor::loadFromFile(ifstream &file, size_t size)
 void Processor::doStep()
 {
     mCPU.memoryMap.mPPURegs->ppustatus.vblank = true;
+#ifdef DO_LOGS
     Logs::GetInstance().registers->info("{}", mRegisters);
+#endif
 
     shared_ptr<IInstruction> iter = mInstructions[*mRegisters.pc >> 0x4][*mRegisters.pc % 0x10];
 
+#ifdef DO_LOGS
     Logs::GetInstance().instruction = typeid(*iter).name() + 6;
-    iter->code(&mRegisters.pc);
     Logs::GetInstance().print_pc_status();
+#endif
 
+    iter->code(&mRegisters.pc);
     iter->execute();
     (mRegisters.pc)++;
 }
@@ -120,8 +123,6 @@ bool Processor::eof() const
 
 void Processor::reset()
 {
-    Jmp j(&mCPU, new Indirect(mCPU), &mRegisters.sp);
-    mRegisters.pc = &mCPU[RESET_INTERRUPT_LOACTION - 1];
-    j.code(&mRegisters.pc);
-    j.execute();
+    Struct16_t buf = {.h = mCPU[RESET_INTERRUPT_LOACTION], .l = mCPU[RESET_INTERRUPT_LOACTION + 1]};
+    mRegisters.pc = &mCPU[buf.raw];
 }

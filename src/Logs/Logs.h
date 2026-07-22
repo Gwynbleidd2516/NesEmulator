@@ -1,6 +1,10 @@
 #ifndef LOGS
 #define LOGS
 
+// #define DO_LOGS
+
+#ifdef DO_LOGS
+
 #include "spdlog/spdlog.h"
 #include <spdlog/sinks/basic_file_sink.h>
 #include "spdlog/async.h"
@@ -47,8 +51,11 @@ private:
         ram = spdlog::basic_logger_mt<spdlog::async_factory>("ram", "logs/ram.txt");
         spdlog::flush_on(spdlog::level::err);
         spdlog::set_pattern("[%f us] [%l] %v");
+        message.reserve(60);
     }
     ~Logs() = default;
 };
+
+#endif
 
 #endif

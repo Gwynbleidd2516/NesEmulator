@@ -203,7 +203,9 @@ struct CPU
             at(i) = value;
             break;
         }
+#ifdef DO_LOGS
         Logs::GetInstance().ram->info("Written in ${:x}; {:x} -> {:x}", i, buf, value);
+#endif
     }
 
     uint8_t read(size_t i)
@@ -233,7 +235,9 @@ struct CPU
             return at(i);
             break;
         }
+#ifdef DO_LOGS
         Logs::GetInstance().ram->info("Read from ${:x} - {}", i, buf);
+#endif
     }
 };
 
