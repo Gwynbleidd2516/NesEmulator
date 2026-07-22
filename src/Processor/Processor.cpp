@@ -104,8 +104,7 @@ void Processor::doStep()
     mCPU.memoryMap.mPPURegs->ppustatus.vblank = true;
     Logs::GetInstance().registers->info("{}", mRegisters);
 
-    uint8_t buf = *mRegisters.pc;
-    shared_ptr<IInstruction> iter = mInstructions[buf >> 0x4][buf % 0x10];
+    shared_ptr<IInstruction> iter = mInstructions[*mRegisters.pc >> 0x4][*mRegisters.pc % 0x10];
 
     Logs::GetInstance().instruction = typeid(*iter).name() + 6;
     iter->code(&mRegisters.pc);
@@ -114,8 +113,8 @@ void Processor::doStep()
     iter->execute();
     (mRegisters.pc)++;
 
-    Logs::GetInstance().registers->flush();
-    Logs::GetInstance().pc_status->flush();
+    // Logs::GetInstance().registers->flush();
+    // Logs::GetInstance().pc_status->flush();
 }
 
 bool Processor::eof() const

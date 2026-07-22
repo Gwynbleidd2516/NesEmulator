@@ -3,6 +3,8 @@
 
 #include "spdlog/spdlog.h"
 #include <spdlog/sinks/basic_file_sink.h>
+#include "spdlog/async.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
 #include <string>
 
 class Logs
@@ -30,6 +32,7 @@ public:
 
     std::shared_ptr<spdlog::logger> pc_status;
     std::shared_ptr<spdlog::logger> registers;
+    std::shared_ptr<spdlog::logger> ram;
 
     std::string instruction;
     std::string adressMode;
@@ -38,12 +41,13 @@ public:
 private:
     Logs()
     {
-        pc_status = spdlog::basic_logger_mt("pc status", "logs/instructions.txt");
-        registers = spdlog::basic_logger_mt("registers", "logs/instructions.txt");
+        spdlog::init_thread_pool(8192, 1);
+        pc_status = spdlog::basic_logger_mt<spdlog::async_factory>("pc status", "logs/instructions.txt");
+        registers = spdlog::basic_logger_mt<spdlog::async_factory>("registers", "logs/registers.txt");
+        ram = spdlog::basic_logger_mt<spdlog::async_factory>("ram", "logs/ram.txt");
+        spdlog::flush_on(spdlog::level::err);
     }
     ~Logs() = default;
 };
-
-// Logs *Logs::instance = nullptr;
 
 #endif
