@@ -10,7 +10,7 @@ protected:
     uint8_t **mPC;
     CPU *mBegin;
     uint8_t **mSP;
-    int mJump;
+    uint16_t mJump;
 
 public:
     Jump(CPU *begin, IAdressMode *adressMode, uint8_t **SP) : HasAdressMode(adressMode)

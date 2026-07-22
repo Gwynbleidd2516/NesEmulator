@@ -9,7 +9,7 @@ class Absolute : public IAdressMode
 private:
     uint16_t mLocation;
     CPU *mPPU;
-    int *mJump;
+    uint16_t *mJump;
 
 public:
     Absolute(CPU &ppu)
@@ -30,15 +30,17 @@ public:
 
     void setValue(uint8_t val) override
     {
+        Logs::GetInstance().message.append(format("${:x}; ", mLocation, val));
         mPPU->write(mLocation, val);
     }
 
     uint8_t getValue() const override
     {
+        Logs::GetInstance().message.append(format("{{${:x}}} {:x} -> ", mLocation, mPPU->at(mLocation)));
         return mPPU->read(mLocation);
     }
 
-    void setJumpPointer(int *j)
+    void setJumpPointer(uint16_t *j)
     {
         mJump = j;
     }
@@ -68,11 +70,13 @@ public:
 
     void setValue(uint8_t val) override
     {
+        Logs::GetInstance().message.append(format("${:x}; ", mLocation, val));
         mPPU->write(mLocation, val);
     }
 
     uint8_t getValue() const override
     {
+        Logs::GetInstance().message.append(format("{{${:x}}} {:x} -> ", mLocation, mPPU->at(mLocation)));
         return mPPU->read(mLocation);
     }
 };

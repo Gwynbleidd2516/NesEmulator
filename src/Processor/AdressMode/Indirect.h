@@ -8,7 +8,7 @@ class Indirect : public IAdressMode
 private:
     uint16_t mLocation;
     CPU *mPPU;
-    uint8_t *mJump;
+    uint16_t *mJump;
 
 public:
     Indirect(CPU &ppu)
@@ -28,15 +28,17 @@ public:
 
     void setValue(uint8_t val) override
     {
+        Logs::GetInstance().message.append(format("${:x}; ", mLocation, val));
         mPPU->write(mLocation, val);
     }
 
     uint8_t getValue() const override
     {
+        Logs::GetInstance().message.append(format("{{${:x}}} {:x} -> ", mLocation, mPPU->at(mLocation)));
         return mPPU->read(mLocation);
     }
 
-    void setJumpPointer(uint8_t *j)
+    void setJumpPointer(uint16_t *j)
     {
         mJump = j;
     }

@@ -22,13 +22,9 @@ public:
 
     uint8_t getValue() const override
     {
+        Logs::GetInstance().message.append(format("{:x}; ", mImm));
         return mImm;
     }
-
-    // uint8_t *getResult() override
-    // {
-    //     return &mImm;
-    // }
 };
 
 #endif

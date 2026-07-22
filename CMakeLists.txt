@@ -18,6 +18,14 @@ FetchContent_Declare(SFML
 
 FetchContent_MakeAvailable(SFML)
 
+FetchContent_Declare(
+    spdlog
+    GIT_REPOSITORY https://github.com/gabime/spdlog.git
+    GIT_TAG        v1.17.0 # Укажите нужную вам версию или тег
+)
+
+FetchContent_MakeAvailable(spdlog)
+
 MACRO(HEADER_DIRECTORIES return_list search_path)
     # Find all header files recursively
     file(GLOB_RECURSE new_list "${search_path}/*.h" "${search_path}/*.hpp")
@@ -41,15 +49,16 @@ HEADER_DIRECTORIES(MY_INCLUDES src)
 file(GLOB TARGET_SRC "src/*.cpp" "src/*/*.cpp")
 file(GLOB TARGET_HEADERS "src/*.h" "src/*/*.h" "src/*/*/*.h")
 
-message(--TARGET_SRC-->${TARGET_SRC})
-message(--TARGET_HEADERS-->${TARGET_HEADERS})
-message(--INCLUDE-->${MY_INCLUDES})
+message(--TARGET_SRC--> ${TARGET_SRC})
+message(--TARGET_HEADERS--> ${TARGET_HEADERS})
+message(--INCLUDE--> ${MY_INCLUDES})
 
 add_executable(main ${TARGET_SRC} ${TARGET_HEADERS})
 
 target_include_directories(main PUBLIC ${MY_INCLUDES})
 
 target_link_libraries(main PRIVATE SFML::System SFML::Window SFML::Graphics SFML::Audio)
+target_link_libraries(main PRIVATE spdlog::spdlog)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/$<0:>)
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${APP_NAME})

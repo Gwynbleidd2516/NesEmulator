@@ -4,15 +4,19 @@
 #include <cstring>
 #include <stdint.h>
 
-struct Flags
+union Flags
 {
-    bool Negative : 1;
-    bool Overflow : 1;
-    bool Break : 1;
-    bool Decimal : 1;
-    bool Interrupt : 1;
-    bool Zero : 1;
-    bool Carry : 1;
+    struct
+    {
+        bool Negative : 1;
+        bool Overflow : 1;
+        bool Break : 1;
+        bool Decimal : 1;
+        bool Interrupt : 1;
+        bool Zero : 1;
+        bool Carry : 1;
+    };
+    uint8_t raw;
 };
 
 #endif

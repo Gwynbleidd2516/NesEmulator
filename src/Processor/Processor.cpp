@@ -52,6 +52,8 @@
 #include "Absolute.h"
 #include "Empty.h"
 
+#include "Logs.h"
+
 Processor::Processor()
 {
     mRegisters.pc = &mCPU.memoryMap.rom[0];
@@ -94,16 +96,26 @@ Processor::Processor()
 void Processor::loadFromFile(ifstream &file, size_t size)
 {
     file.read(reinterpret_cast<char *>(&mCPU.memoryMap.rom), sizeof(MemoryMap::rom) * size);
+    mNMIClock.start();
 }
 
 void Processor::doStep()
 {
     mCPU.memoryMap.mPPURegs->ppustatus.vblank = true;
+    Logs::GetInstance().registers->info("{}", mRegisters);
+
     uint8_t buf = *mRegisters.pc;
     shared_ptr<IInstruction> iter = mInstructions[buf >> 0x4][buf % 0x10];
-    iter->code(&mRegisters.pc);
+
+    Logs::GetInstance().instruction = typeid(*iter).name() + 6;
+    iter->scan(&mRegisters.pc);
+    Logs::GetInstance().print_pc_status();
+
     iter->execute();
     (mRegisters.pc)++;
+
+    Logs::GetInstance().registers->flush();
+    Logs::GetInstance().pc_status->flush();
 }
 
 bool Processor::eof() const
@@ -113,7 +125,7 @@ bool Processor::eof() const
 
 void Processor::reset()
 {
-    Jmp j(mCPU, new Indirect(mCPU), &mRegisters.sp);
+    Jmp j(&mCPU, new Indirect(mCPU), &mRegisters.sp);
     mRegisters.pc = &mCPU[RESET_INTERRUPT_LOACTION - 1];
     j.code(&mRegisters.pc);
     j.execute();

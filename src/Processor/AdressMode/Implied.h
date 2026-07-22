@@ -21,11 +21,13 @@ public:
 
     void setValue(uint8_t val) override
     {
+        Logs::GetInstance().message.append(format("{}; ", typeid(*mReg).name() + 6));
         mReg->setValue(val);
     }
 
     uint8_t getValue() const override
     {
+        Logs::GetInstance().message.append(format("{} -> ", typeid(*mReg).name() + 6));
         return mReg->getValue();
     }
 };
