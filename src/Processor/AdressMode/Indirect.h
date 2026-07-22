@@ -24,6 +24,9 @@ public:
         Struct16_t buf2 = {.h = mPPU->read(buf.raw), .l = mPPU->read(buf.raw + 1)};
         mLocation = buf2.raw;
         (*it)++;
+#ifdef DO_LOGS
+        Logs::GetInstance().adressMode = typeid(*this).name() + 6;
+#endif
     }
 
     void setValue(uint8_t val) override

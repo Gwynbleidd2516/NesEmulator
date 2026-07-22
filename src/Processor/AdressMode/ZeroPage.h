@@ -19,6 +19,9 @@ public:
     {
         (*it)++;
         mLocation = **it;
+#ifdef DO_LOGS
+        Logs::GetInstance().adressMode = typeid(*this).name() + 6;
+#endif
     }
 
     void setValue(uint8_t val) override
@@ -56,6 +59,9 @@ public:
     {
         (*it)++;
         mLocation = mPPU->read(**it + mReg->getValue());
+#ifdef DO_LOGS
+        Logs::GetInstance().adressMode = typeid(*this).name() + 6;
+#endif
     }
 
     void setValue(uint8_t val) override

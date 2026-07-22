@@ -70,6 +70,9 @@ public:
         Struct16_t buf = {.h = **it, .l = *(*it + 1)};
         mLocation = buf.raw + mReg->getValue();
         (*it)++;
+#ifdef DO_LOGS
+        Logs::GetInstance().adressMode = typeid(*mReg).name() + 6;
+#endif
     }
 
     void setValue(uint8_t val) override
