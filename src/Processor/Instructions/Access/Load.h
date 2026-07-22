@@ -10,9 +10,10 @@ public:
 
     void execute() override
     {
-        mFlags->Zero = (mAdressMode->getValue() == 0);
-        mFlags->Negative = (mAdressMode->getValue() >> 7);
-        mReg->setValue(mAdressMode->getValue());
+        uint8_t buf = mAdressMode->getValue();
+        mFlags->Zero = (buf == 0);
+        mFlags->Negative = (buf >> 7);
+        mReg->setValue(buf);
     }
 };
 
