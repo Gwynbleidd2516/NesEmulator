@@ -6,6 +6,7 @@
 using namespace std;
 
 #include "Ppu.h"
+#include "Logs.h"
 
 struct OAM
 {
@@ -171,6 +172,7 @@ struct CPU
 
     void write(size_t i, uint8_t value)
     {
+        uint8_t buf = memoryMap[i];
         switch (i)
         {
         case 0x2004:
@@ -201,15 +203,17 @@ struct CPU
             at(i) = value;
             break;
         }
+        Logs::GetInstance().ram->info("Written in ${:x}; {:x} -> {:x}", i, buf, value);
     }
 
     uint8_t read(size_t i)
     {
+        uint8_t buf = memoryMap[i];
         uint8_t ans;
         switch (i)
         {
         case 0x2002:
-            memoryMap.mPPURegs->ppustatus.vblank = false;
+            // memoryMap.mPPURegs->ppustatus.vblank = false;
             ppuaddrLatch = false;
             ppuscrollLatch = false;
             return memoryMap.mPPURegs->ppustatus.raw;
@@ -229,6 +233,7 @@ struct CPU
             return at(i);
             break;
         }
+        Logs::GetInstance().ram->info("Read from ${:x} - {}", i, buf);
     }
 };
 

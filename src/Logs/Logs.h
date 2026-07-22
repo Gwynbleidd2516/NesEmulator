@@ -41,11 +41,12 @@ public:
 private:
     Logs()
     {
-        spdlog::init_thread_pool(8192, 1);
+        spdlog::init_thread_pool(8192, 3);
         pc_status = spdlog::basic_logger_mt<spdlog::async_factory>("pc status", "logs/instructions.txt");
         registers = spdlog::basic_logger_mt<spdlog::async_factory>("registers", "logs/registers.txt");
         ram = spdlog::basic_logger_mt<spdlog::async_factory>("ram", "logs/ram.txt");
         spdlog::flush_on(spdlog::level::err);
+        spdlog::set_pattern("[%f us] [%l] %v");
     }
     ~Logs() = default;
 };
