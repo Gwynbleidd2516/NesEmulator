@@ -2,6 +2,7 @@
 #define STORE
 
 #include "Access.h"
+#include <thread>
 
 class Store : public Access
 {
@@ -11,7 +12,7 @@ public:
     void execute() override
     {
         uint8_t buf = mReg->getValue();
-        mFlags->Zero = (buf == 0);
+        mFlags->Zero = !buf;
         mFlags->Negative = (buf >> 7);
         mAdressMode->setValue(buf);
     }

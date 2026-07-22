@@ -11,7 +11,7 @@ public:
     void execute() override
     {
         uint8_t buf = mAdressMode->getValue();
-        mFlags->Zero = (buf == 0);
+        mFlags->Zero = !buf;
         mFlags->Negative = (buf >> 7);
         mReg->setValue(buf);
     }
