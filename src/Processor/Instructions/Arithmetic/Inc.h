@@ -22,9 +22,10 @@ public:
 
     void execute() override
     {
-        mAdressMode->setValue(mAdressMode->getValue() + 1);
-        mFlags->Zero = (mAdressMode->getValue() == 0);
-        mFlags->Negative = (mAdressMode->getValue() >> 7);
+        uint8_t buf = mAdressMode->getValue() + 1;
+        mAdressMode->setValue(buf + 1);
+        mFlags->Zero = (buf == 0);
+        mFlags->Negative = (buf >> 7);
         // (*mAdressMode->getResult())++;
     }
 };

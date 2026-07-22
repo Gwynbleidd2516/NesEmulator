@@ -17,6 +17,7 @@ public:
 
     void code(uint8_t **)
     {
+        Logs::GetInstance().adressMode = typeid(*mReg).name() + 6;
     }
 
     void setValue(uint8_t val) override
@@ -27,7 +28,7 @@ public:
 
     uint8_t getValue() const override
     {
-        Logs::GetInstance().message.append(format("{} -> ", typeid(*mReg).name() + 6));
+        Logs::GetInstance().message.append(format("{}({:x}) -> ", typeid(*mReg).name() + 6, mReg->getValue()));
         return mReg->getValue();
     }
 };
