@@ -6,7 +6,6 @@ Render::Render()
 {
     mTextueBank1.resize(Vector2u(16 * 8, 16 * 8));
     mTextueBank2.resize(Vector2u(16 * 8, 16 * 8));
-    mWindow.create(VideoMode({800, 600}), "NES emu");
     mPatternTable1;
     mPatternTable2;
 }
@@ -85,6 +84,7 @@ void Render::loadFromFile(ifstream &file, size_t size)
         mPatternTable1.push_back(sp1);
         mPatternTable2.push_back(sp2);
     }
+    mWindow.create(VideoMode({800, 600}), "NES emu");
 }
 
 bool Render::isOpen() const
