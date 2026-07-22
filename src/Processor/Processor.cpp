@@ -96,7 +96,6 @@ Processor::Processor()
 void Processor::loadFromFile(ifstream &file, size_t size)
 {
     file.read(reinterpret_cast<char *>(&mCPU.memoryMap.rom), sizeof(MemoryMap::rom) * size);
-    mNMIClock.start();
 }
 
 void Processor::doStep()
@@ -112,9 +111,6 @@ void Processor::doStep()
 
     iter->execute();
     (mRegisters.pc)++;
-
-    // Logs::GetInstance().registers->flush();
-    // Logs::GetInstance().pc_status->flush();
 }
 
 bool Processor::eof() const
