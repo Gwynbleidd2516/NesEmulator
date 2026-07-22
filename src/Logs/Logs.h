@@ -38,8 +38,8 @@ public:
 private:
     Logs()
     {
-        pc_status = spdlog::basic_logger_mt("pc status", "logs/cpu.txt");
-        registers = spdlog::basic_logger_mt("registers", "logs/cpu.txt");
+        pc_status = spdlog::basic_logger_mt("pc status", "logs/instructions.txt");
+        registers = spdlog::basic_logger_mt("registers", "logs/instructions.txt");
     }
     ~Logs() = default;
 };

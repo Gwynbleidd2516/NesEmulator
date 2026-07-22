@@ -108,7 +108,7 @@ void Processor::doStep()
     shared_ptr<IInstruction> iter = mInstructions[buf >> 0x4][buf % 0x10];
 
     Logs::GetInstance().instruction = typeid(*iter).name() + 6;
-    iter->scan(&mRegisters.pc);
+    iter->code(&mRegisters.pc);
     Logs::GetInstance().print_pc_status();
 
     iter->execute();
