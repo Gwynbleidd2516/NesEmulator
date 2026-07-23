@@ -12,7 +12,7 @@ Render::Render()
 
 OAM *Render::getOAM()
 {
-    return &mOAM[0];
+    return mOAM[0];
 }
 
 void Render::loadFromFile(ifstream &file, size_t size)
@@ -121,4 +121,9 @@ void Render::show()
     }
 
     mWindow.display();
+}
+
+PPU *Render::getPPU()
+{
+    return &mPPU;
 }

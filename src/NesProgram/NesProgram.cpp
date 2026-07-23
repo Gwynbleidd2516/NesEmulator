@@ -36,6 +36,8 @@ void NesProgram::loadFile(string path)
     mRender.loadFromFile(file, header.chrSize);
 
     file.close();
+
+    mProcessor.getCPU()->ppu = mRender.getPPU();
 }
 
 void NesProgram::step()

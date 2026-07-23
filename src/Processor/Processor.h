@@ -30,6 +30,8 @@ public:
     bool eof() const;
 
     void reset();
+
+    CPU *getCPU();
 };
 
-#endif
+#endif 

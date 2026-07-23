@@ -128,3 +128,8 @@ void Processor::reset()
     Struct16_t buf = {.h = mCPU[RESET_INTERRUPT_LOACTION], .l = mCPU[RESET_INTERRUPT_LOACTION + 1]};
     mRegisters.pc = &mCPU[buf.raw];
 }
+
+CPU *Processor::getCPU()
+{
+    return &mCPU;
+}
