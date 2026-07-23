@@ -25,7 +25,7 @@ public:
     void setValue(uint8_t val) override
     {
 #ifdef DO_LOGS
-        Logs::GetInstance().message.append(format("{:x}; ", typeid(*mReg).name() + 6));
+        Logs::GetInstance().message.append(format("{}({:x}); ", typeid(*mReg).name() + 6, mReg->getValue()));
 #endif
         mReg->setValue(val);
     }
