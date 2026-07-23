@@ -23,7 +23,7 @@ public:
     uint8_t getValue() const override
     {
 #ifdef DO_LOGS
-        Logs::GetInstance().message.append(format("{:x}; ", mImm));
+        Logs::GetInstance().message.append(format("{:x} -> ", mImm));
 #endif
         return mImm;
     }
