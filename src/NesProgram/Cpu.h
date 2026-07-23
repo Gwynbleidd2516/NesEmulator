@@ -195,7 +195,7 @@ struct CPU
             break;
 
         case 0x2007:
-            ppu->at(memoryMap.mPPURegs->ppuaddr);
+            ppu->write(memoryMap.mPPURegs->ppuaddr, value);
             memoryMap.mPPURegs->ppuaddr += 1 + memoryMap.mPPURegs->ppuctrl.increment * 31;
             break;
         default:
@@ -225,7 +225,7 @@ struct CPU
             break;
 
         case 0x2007:
-            ans = ppu->at(memoryMap.mPPURegs->ppuaddr);
+            ans = ppu->read(memoryMap.mPPURegs->ppuaddr);
             memoryMap.mPPURegs->ppuaddr += 1 + memoryMap.mPPURegs->ppuctrl.increment * 31;
             return ans;
             break;
