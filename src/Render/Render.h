@@ -7,6 +7,7 @@ using namespace std;
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
 using namespace sf;
+#include "Ppu.h"
 
 #include "Cpu.h"
 
@@ -22,6 +23,7 @@ private:
     vector<Sprite> mPatternTable2;
 
     OAM mOAM[64];
+    PPU mPPU;
 
 public:
     Render();
