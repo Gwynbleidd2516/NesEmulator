@@ -19,6 +19,7 @@ void Render::loadFromFile(ifstream &file, size_t size)
 {
     DiscreteVal chr[0x2000];
     file.read(reinterpret_cast<char *>(&chr), 0x2000 * size);
+    memcpy(&mPPU, chr, 0x2000);
 
     unsigned char mTable1[8 * 16 * 8 * 16];
     unsigned char mTable2[8 * 16 * 8 * 16];
