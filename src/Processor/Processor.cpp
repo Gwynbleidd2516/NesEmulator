@@ -108,11 +108,13 @@ void Processor::doStep()
 
 #ifdef DO_LOGS
     Logs::GetInstance().instruction = typeid(*iter).name() + 6;
-    Logs::GetInstance().print_pc_status();
 #endif
 
     iter->code(&mRegisters.pc);
     iter->execute();
+#ifdef DO_LOGS
+    Logs::GetInstance().print_pc_status();
+#endif
     (mRegisters.pc)++;
 }
 
