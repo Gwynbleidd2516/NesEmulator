@@ -9,25 +9,13 @@ class Cmp : public Compare
 public:
     using Compare::Compare;
 
-    // Cmp(shared_ptr<Implied> reg, shared_ptr<IAdressMode> adressMode) : HasAdressMode(adressMode)
-    // {
-    //     mReg = reg;
-    // }
-
     void execute() override
     {
-        if (mAdressMode->getValue() >= mSrc->getValue())
-        {
-            mFlags->Carry = true;
-        }
-        else if (mAdressMode->getValue() == mSrc->getValue())
-        {
-            mFlags->Zero = true;
-        }
-        else
-        {
-            mFlags->Negative = true;
-        }
+        uint8_t am = mAdressMode->getValue();
+        uint8_t src = mSrc->getValue();
+        mFlags->Carry = (am >= src);
+        mFlags->Zero = (am == src);
+        mFlags->Negative = (am < src);
     }
 };
 
