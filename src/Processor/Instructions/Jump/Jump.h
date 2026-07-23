@@ -8,14 +8,14 @@ class Jump : public HasAdressMode
 {
 protected:
     uint8_t **mPC;
-    CPU *mBegin;
+    MemoryMap *mBegin;
     uint8_t **mSP;
     uint16_t mJump;
 
 public:
     Jump(CPU *begin, IAdressMode *adressMode, uint8_t **SP) : HasAdressMode(adressMode)
     {
-        mBegin = begin;
+        mBegin = &begin->memoryMap;
         mSP = SP;
     }
 
