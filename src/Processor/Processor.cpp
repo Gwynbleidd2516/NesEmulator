@@ -133,3 +133,8 @@ CPU *Processor::getCPU()
 {
     return &mCPU;
 }
+
+OAM *Processor::getOAM()
+{
+    return &mCPU.memoryMap.mMirror->oam[0];
+}

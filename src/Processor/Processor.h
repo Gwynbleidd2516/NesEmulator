@@ -32,6 +32,8 @@ public:
     void reset();
 
     CPU *getCPU();
+
+    OAM *getOAM();
 };
 
-#endif 
+#endif

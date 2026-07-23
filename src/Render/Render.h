@@ -20,13 +20,13 @@ private:
     vector<Sprite> mPatternTable1;
     vector<Sprite> mPatternTable2;
 
-    OAM* mOAM[64];
+    OAM* mOAM;
     PPU mPPU;
 
 public:
     Render();
 
-    OAM *getOAM();
+    void setOAM(OAM* oam);
 
     void loadFromFile(ifstream &file, size_t size);
 

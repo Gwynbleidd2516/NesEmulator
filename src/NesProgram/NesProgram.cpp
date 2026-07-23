@@ -38,6 +38,7 @@ void NesProgram::loadFile(string path)
     file.close();
 
     mProcessor.getCPU()->ppu = mRender.getPPU();
+    mRender.setOAM(mProcessor.getOAM());
 }
 
 void NesProgram::step()

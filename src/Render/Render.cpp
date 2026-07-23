@@ -10,9 +10,9 @@ Render::Render()
     mPatternTable2;
 }
 
-OAM *Render::getOAM()
+void Render::setOAM(OAM *oam)
 {
-    return mOAM[0];
+    mOAM = oam;
 }
 
 void Render::loadFromFile(ifstream &file, size_t size)
