@@ -6,7 +6,6 @@
 using namespace std;
 
 #include "Ppu.h"
-#include "Logs.h"
 
 struct OAM
 {

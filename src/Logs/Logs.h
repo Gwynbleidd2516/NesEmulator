@@ -37,6 +37,7 @@ public:
     std::shared_ptr<spdlog::logger> pc_status;
     std::shared_ptr<spdlog::logger> registers;
     std::shared_ptr<spdlog::logger> ram;
+    std::shared_ptr<spdlog::logger> ppu;
 
     std::string instruction;
     std::string adressMode;
@@ -49,6 +50,7 @@ private:
         pc_status = spdlog::basic_logger_mt<spdlog::async_factory>("pc status", "logs/instructions.txt");
         registers = spdlog::basic_logger_mt<spdlog::async_factory>("registers", "logs/registers.txt");
         ram = spdlog::basic_logger_mt<spdlog::async_factory>("ram", "logs/ram.txt");
+        ppu = spdlog::basic_logger_mt<spdlog::async_factory>("ppu", "logs/ppu.txt");
         spdlog::flush_on(spdlog::level::err);
         spdlog::set_pattern("[%f us] [%l] %v");
         message.reserve(60);
