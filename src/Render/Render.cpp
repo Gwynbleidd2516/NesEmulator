@@ -15,10 +15,10 @@ void Render::setOAM(OAM *oam)
     mOAM = oam;
 }
 
-void Render::loadFromFile(ifstream &file, size_t size)
+void Render::loadFromFile(ifstream &file)
 {
     DiscreteVal chr[0x2000];
-    file.read(reinterpret_cast<char *>(&chr), 0x2000 * size);
+    file.read(reinterpret_cast<char *>(&chr), 0x2000 * mHeader.chrSize);
     memcpy(&mPPU, chr, 0x2000);
 
     unsigned char mTable1[8 * 16 * 8 * 16];
@@ -85,7 +85,6 @@ void Render::loadFromFile(ifstream &file, size_t size)
         mPatternTable1.push_back(sp1);
         mPatternTable2.push_back(sp2);
     }
-    mWindow.create(VideoMode({800, 600}), "NES emu");
 }
 
 bool Render::isOpen() const
@@ -95,6 +94,7 @@ bool Render::isOpen() const
 
 void Render::show()
 {
+    mWindow.create(VideoMode({800, 600}), "NES emu");
     while (const std::optional event = mWindow.pollEvent())
     {
         if (event->is<sf::Event::Closed>())
@@ -102,20 +102,39 @@ void Render::show()
     }
     mWindow.clear();
 
+    for (int i = 0; i < 32; i++)
+    {
+        for (int j = 0; j < 30; j++)
+        {
+            Sprite buf = mPatternTable1[mPPU.mNametable0[i][j]];
+            buf.setPosition(sf::Vector2f(8.0 * i, 8.0 * j));
+            mWindow.draw(buf);
+            buf = mPatternTable1[mPPU.mNametable1[i][j]];
+            buf.setPosition(sf::Vector2f(8.0 * i + 256.0, 8.0 * j));
+            mWindow.draw(buf);
+            buf = mPatternTable1[mPPU.mNametable2[i][j]];
+            buf.setPosition(sf::Vector2f(8.0 * i, 8.0 * j + 240.0));
+            mWindow.draw(buf);
+            buf = mPatternTable1[mPPU.mNametable3[i][j]];
+            buf.setPosition(sf::Vector2f(8.0 * i + 256.0, 8.0 * j + 240.0));
+            mWindow.draw(buf);
+        }
+    }
+
     for (size_t i = 0; i < 64; i++)
     {
-        if (mOAM[i].bank == 1)
+        if (mOAM[i].bank == 0)
         {
             Sprite buf = mPatternTable1[mOAM[i].tile];
             buf.setPosition({(float)mOAM[i].x, (float)mOAM[i].y});
-            buf.setScale(Vector2f(-1.0f + mOAM[i].flipHorizontally * 2.0f, -1.0f + mOAM[i].flipVertically * 2.0f));
+            buf.setScale(Vector2f(-1.0f + !mOAM[i].flipHorizontally * 2.0f, -1.0f + !mOAM[i].flipVertically * 2.0f));
             mWindow.draw(buf);
         }
         else
         {
             Sprite buf = mPatternTable2[mOAM[i].tile];
             buf.setPosition({(float)mOAM[i].x, (float)mOAM[i].y});
-            buf.setScale(Vector2f(-1.0f + mOAM[i].flipHorizontally * 2.0f, -1.0f + mOAM[i].flipVertically * 2.0f));
+            buf.setScale(Vector2f(-1.0f + !mOAM[i].flipHorizontally * 2.0f, -1.0f + !mOAM[i].flipVertically * 2.0f));
             mWindow.draw(buf);
         }
     }
@@ -126,4 +145,9 @@ void Render::show()
 PPU *Render::getPPU()
 {
     return &mPPU;
+}
+
+void Render::setHeader(Header h)
+{
+    mHeader = h;
 }
