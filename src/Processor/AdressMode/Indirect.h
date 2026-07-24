@@ -7,13 +7,13 @@ class Indirect : public IAdressMode
 {
 private:
     uint16_t mLocation;
-    CPU *mPPU;
+    CPU *mCPU;
     uint16_t *mJump;
 
 public:
-    Indirect(CPU &ppu)
+    Indirect(CPU *cpu)
     {
-        mPPU = &ppu;
+        mCPU = cpu;
     }
 
     void code(uint8_t **it) override
@@ -21,7 +21,7 @@ public:
         (*it)++;
         Struct16_t buf = {.h = **it, .l = *(*it + 1)};
         *mJump = buf.raw;
-        Struct16_t buf2 = {.h = mPPU->read(buf.raw), .l = mPPU->read(buf.raw + 1)};
+        Struct16_t buf2 = {.h = mCPU->read(buf.raw), .l = mCPU->read(buf.raw + 1)};
         mLocation = buf2.raw;
         (*it)++;
 #ifdef DO_LOGS
@@ -34,15 +34,15 @@ public:
 #ifdef DO_LOGS
         Logs::GetInstance().message.append(format("${:x}; ", mLocation, val));
 #endif
-        mPPU->write(mLocation, val);
+        mCPU->write(mLocation, val);
     }
 
     uint8_t getValue() const override
     {
 #ifdef DO_LOGS
-        Logs::GetInstance().message.append(format("{{${:x}}} {:x} -> ", mLocation, mPPU->at(mLocation)));
+        Logs::GetInstance().message.append(format("{{${:x}}} {:x} -> ", mLocation, mCPU->at(mLocation)));
 #endif
-        return mPPU->read(mLocation);
+        return mCPU->read(mLocation);
     }
 
     void setJumpPointer(uint16_t *j)

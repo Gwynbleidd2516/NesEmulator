@@ -21,14 +21,12 @@ private:
     vector<Sprite> mPatternTable1;
     vector<Sprite> mPatternTable2;
 
-    OAM *mOAM;
-    PPU mPPU;
+    CPU *mCPU;
+    PPU *mPPU;
     Header mHeader;
 
 public:
     Render();
-
-    void setOAM(OAM *oam);
 
     void loadFromFile(ifstream &file);
 
@@ -36,7 +34,9 @@ public:
 
     void show();
 
-    PPU *getPPU();
+    void setCPU(CPU *cpu);
+
+    void setPPU(PPU* ppu);
 
     void setHeader(Header h);
 };

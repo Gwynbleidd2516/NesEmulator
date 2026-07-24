@@ -18,24 +18,34 @@ void NesProgram::loadFile(string path)
 
     mProcessor.setHeader(mHeader);
 
-    mProcessor.loadFromFile(file);
-    mRender.loadFromFile(file);
+    if (mHeader.rpgSize == 1)
+    {
+        file.read(reinterpret_cast<char *>(&mCPU.memoryMap.rom2), 0x4000 * mHeader.rpgSize);
+    }
+    else
+    {
+        file.read(reinterpret_cast<char *>(&mCPU.memoryMap.rom1), 0x4000 * mHeader.rpgSize);
+    }
+    mCPU.memoryMap.mPPURegs->ppuctrl.nmi_enable = false;
+
+    file.read(reinterpret_cast<char *>(&mPPU), 0x2000 * mHeader.chrSize);
+    mCPU.ppu = &mPPU;
+    mProcessor.setCPU(&mCPU);
+    mRender.setCPU(&mCPU);
+    mRender.setPPU(&mPPU);
 
     file.close();
-
-    mProcessor.getCPU()->ppu = mRender.getPPU();
-    mRender.setOAM(mProcessor.getOAM());
 }
 
 void NesProgram::step()
 {
     mProcessor.doStep();
-    // mRender.show();
+    mRender.show();
 }
 
 bool NesProgram::isEnd() const
 {
-    return mProcessor.eof(); //|| !mRender.isOpen();
+    return !mRender.isOpen();
 }
 
 void NesProgram::reset()

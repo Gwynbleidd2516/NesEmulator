@@ -9,21 +9,21 @@ class IndirectX : public IAdressMode
 {
 private:
     uint8_t mLocation;
-    CPU *mPPU;
+    CPU *mCPU;
     Index *mReg;
 
 public:
-    IndirectX(CPU &ppu, Index *reg)
+    IndirectX(CPU *cpu, Index *reg)
     {
-        mPPU = &ppu;
+        mCPU = cpu;
         mReg = reg;
     }
 
     void code(uint8_t **it) override
     {
         (*it)++;
-        Struct16_t buf = {.h = mPPU->read(**(it) + mReg->getValue()),
-                          .l = mPPU->read(**(it) + mReg->getValue() + 1)};
+        Struct16_t buf = {.h = mCPU->read(**(it) + mReg->getValue()),
+                          .l = mCPU->read(**(it) + mReg->getValue() + 1)};
 
         mLocation = buf.raw;
 #ifdef DO_LOGS
@@ -36,15 +36,15 @@ public:
 #ifdef DO_LOGS
         Logs::GetInstance().message.append(format("${:x}; ", mLocation));
 #endif
-        mPPU->write(mLocation, val);
+        mCPU->write(mLocation, val);
     }
 
     uint8_t getValue() const override
     {
 #ifdef DO_LOGS
-        Logs::GetInstance().message.append(format("{{${:x}}} {:x} -> ", mLocation, mPPU->at(mLocation)));
+        Logs::GetInstance().message.append(format("{{${:x}}} {:x} -> ", mLocation, mCPU->at(mLocation)));
 #endif
-        return mPPU->read(mLocation);
+        return mCPU->read(mLocation);
     }
 };
 
@@ -52,21 +52,21 @@ class IndirectY : public IAdressMode
 {
 private:
     uint8_t mLocation;
-    CPU *mPPU;
+    CPU *mCPU;
     Index *mReg;
 
 public:
-    IndirectY(CPU &ppu, Index *reg)
+    IndirectY(CPU *cpu, Index *reg)
     {
-        mPPU = &ppu;
+        mCPU = cpu;
         mReg = reg;
     }
 
     void code(uint8_t **it) override
     {
         (*it)++;
-        Struct16_t buf = {.h = mPPU->read(**(it)),
-                          .l = mPPU->read(**(it) + 1)};
+        Struct16_t buf = {.h = mCPU->read(**(it)),
+                          .l = mCPU->read(**(it) + 1)};
 
         mLocation = buf.raw + mReg->getValue();
 #ifdef DO_LOGS
@@ -79,15 +79,15 @@ public:
 #ifdef DO_LOGS
         Logs::GetInstance().message.append(format("${:x}; ", mLocation));
 #endif
-        mPPU->write(mLocation, val);
+        mCPU->write(mLocation, val);
     }
 
     uint8_t getValue() const override
     {
 #ifdef DO_LOGS
-        Logs::GetInstance().message.append(format("{{${:x}}} {:x} -> ", mLocation, mPPU->at(mLocation)));
+        Logs::GetInstance().message.append(format("{{${:x}}} {:x} -> ", mLocation, mCPU->at(mLocation)));
 #endif
-        return mPPU->read(mLocation);
+        return mCPU->read(mLocation);
     }
 };
 

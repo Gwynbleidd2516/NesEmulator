@@ -17,14 +17,12 @@ private:
     vector<vector<shared_ptr<IInstruction>>> mInstructions;
     Registers mRegisters;
     Header mHeader;
-    CPU mCPU;
+    CPU *mCPU;
     sf::Clock mNmiClock;
     sf::Clock mWarpNmiClock;
 
 public:
     Processor();
-
-    void loadFromFile(ifstream &file);
 
     void doStep();
 
@@ -34,9 +32,9 @@ public:
 
     void nmi();
 
-    CPU *getCPU();
+    void setCPU(CPU *cpu);
 
-    OAM *getOAM();
+    void setPPU(PPU *ppu);
 
     void setHeader(Header h);
 };

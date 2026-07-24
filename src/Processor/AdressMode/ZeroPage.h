@@ -7,12 +7,12 @@ class ZeroPage : public IAdressMode
 {
 private:
     uint8_t mLocation;
-    CPU *mPPU;
+    CPU *mCPU;
 
 public:
-    ZeroPage(CPU &ppu)
+    ZeroPage(CPU *cpu)
     {
-        mPPU = &ppu;
+        mCPU = cpu;
     }
 
     void code(uint8_t **it) override
@@ -29,15 +29,15 @@ public:
 #ifdef DO_LOGS
         Logs::GetInstance().message.append(format("${:x}; ", mLocation));
 #endif
-        mPPU->write(mLocation, val);
+        mCPU->write(mLocation, val);
     }
 
     uint8_t getValue() const override
     {
 #ifdef DO_LOGS
-        Logs::GetInstance().message.append(format("{{${:x}}} {:x}; ", mLocation, mPPU->at(mLocation)));
+        Logs::GetInstance().message.append(format("{{${:x}}} {:x}; ", mLocation, mCPU->at(mLocation)));
 #endif
-        return mPPU->read(mLocation);
+        return mCPU->read(mLocation);
     }
 };
 
@@ -45,20 +45,20 @@ class ZeroPageInd : public IAdressMode
 {
 private:
     uint8_t mLocation;
-    CPU *mPPU;
+    CPU *mCPU;
     Index *mReg;
 
 public:
-    ZeroPageInd(CPU &ppu, Index *reg)
+    ZeroPageInd(CPU *cpu, Index *reg)
     {
-        mPPU = &ppu;
+        mCPU = cpu;
         mReg = reg;
     }
 
     void code(uint8_t **it) override
     {
         (*it)++;
-        mLocation = mPPU->read(**it + mReg->getValue());
+        mLocation = mCPU->read(**it + mReg->getValue());
 #ifdef DO_LOGS
         Logs::GetInstance().adressMode = typeid(*this).name() + 6;
 #endif
@@ -69,15 +69,15 @@ public:
 #ifdef DO_LOGS
         Logs::GetInstance().message.append(format("${:x}; ", mLocation));
 #endif
-        mPPU->write(mLocation, val);
+        mCPU->write(mLocation, val);
     }
 
     uint8_t getValue() const override
     {
 #ifdef DO_LOGS
-        Logs::GetInstance().message.append(format("{{${:x}}} {:x}; ", mLocation, mPPU->at(mLocation)));
+        Logs::GetInstance().message.append(format("{{${:x}}} {:x}; ", mLocation, mCPU->at(mLocation)));
 #endif
-        return mPPU->read(mLocation);
+        return mCPU->read(mLocation);
     }
 };
 

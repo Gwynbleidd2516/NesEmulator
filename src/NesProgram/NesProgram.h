@@ -12,6 +12,8 @@ class NesProgram
 {
 private:
     Header mHeader;
+    CPU mCPU;
+    PPU mPPU;
     Processor mProcessor;
     Render mRender;
 

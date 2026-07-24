@@ -8,13 +8,13 @@ class Absolute : public IAdressMode
 {
 private:
     uint16_t mLocation;
-    CPU *mPPU;
+    CPU *mCPU;
     uint16_t *mJump;
 
 public:
-    Absolute(CPU &ppu)
+    Absolute(CPU *cpu)
     {
-        mPPU = &ppu;
+        mCPU = cpu;
         mJump = nullptr;
     }
 
@@ -33,15 +33,15 @@ public:
 #ifdef DO_LOGS
         Logs::GetInstance().message.append(format("${:x}; ", mLocation, val));
 #endif
-        mPPU->write(mLocation, val);
+        mCPU->write(mLocation, val);
     }
 
     uint8_t getValue() const override
     {
 #ifdef DO_LOGS
-        Logs::GetInstance().message.append(format("{{${:x}}} {:x} -> ", mLocation, mPPU->at(mLocation)));
+        Logs::GetInstance().message.append(format("{{${:x}}} {:x} -> ", mLocation, mCPU->at(mLocation)));
 #endif
-        return mPPU->read(mLocation);
+        return mCPU->read(mLocation);
     }
 
     void setJumpPointer(uint16_t *j)
@@ -54,13 +54,13 @@ class AbsoluteInd : public IAdressMode
 {
 private:
     uint16_t mLocation;
-    CPU *mPPU;
+    CPU *mCPU;
     Index *mReg;
 
 public:
-    AbsoluteInd(CPU &ppu, Index *reg)
+    AbsoluteInd(CPU *cpu, Index *reg)
     {
-        mPPU = &ppu;
+        mCPU = cpu;
         mReg = reg;
     }
 
@@ -80,15 +80,15 @@ public:
 #ifdef DO_LOGS
         Logs::GetInstance().message.append(format("${:x}; ", mLocation, val));
 #endif
-        mPPU->write(mLocation, val);
+        mCPU->write(mLocation, val);
     }
 
     uint8_t getValue() const override
     {
 #ifdef DO_LOGS
-        Logs::GetInstance().message.append(format("{{${:x}}} {:x} -> ", mLocation, mPPU->at(mLocation)));
+        Logs::GetInstance().message.append(format("{{${:x}}} {:x} -> ", mLocation, mCPU->at(mLocation)));
 #endif
-        return mPPU->read(mLocation);
+        return mCPU->read(mLocation);
     }
 };
 
