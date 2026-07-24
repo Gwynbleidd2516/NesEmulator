@@ -22,7 +22,9 @@ public:
 
     void execute() override
     {
-        memcpy(*mStack, mFlags, sizeof(Flags));
+        Flags buf = *mFlags;
+        buf.Break = true;
+        **mStack = buf.raw;
         (*mStack)++;
     }
 };
