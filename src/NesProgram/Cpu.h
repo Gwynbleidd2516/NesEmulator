@@ -198,6 +198,9 @@ struct CPU
             ppu->write(memoryMap.mPPURegs->ppuaddr, value);
             memoryMap.mPPURegs->ppuaddr += 1 + memoryMap.mPPURegs->ppuctrl.increment * 31;
             break;
+        case 0x4014:
+            memoryMap[0x200 + memoryMap.mPPURegs->oamaddr++] = value;
+            break;
         default:
             at(i) = value;
             break;
