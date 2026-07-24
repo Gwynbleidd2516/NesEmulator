@@ -8,6 +8,7 @@ using namespace std;
 #include <SFML/OpenGL.hpp>
 using namespace sf;
 #include "Cpu.h"
+#include "Header.h"
 
 class Render
 {
@@ -20,21 +21,24 @@ private:
     vector<Sprite> mPatternTable1;
     vector<Sprite> mPatternTable2;
 
-    OAM* mOAM;
+    OAM *mOAM;
     PPU mPPU;
+    Header mHeader;
 
 public:
     Render();
 
-    void setOAM(OAM* oam);
+    void setOAM(OAM *oam);
 
-    void loadFromFile(ifstream &file, size_t size);
+    void loadFromFile(ifstream &file);
 
     bool isOpen() const;
 
     void show();
 
-    PPU* getPPU();
+    PPU *getPPU();
+
+    void setHeader(Header h);
 };
 
 #endif

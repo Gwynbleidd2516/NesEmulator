@@ -57,8 +57,6 @@
 Processor::Processor()
 {
     mRegisters.sp = &mCPU.memoryMap.mMirror[0].stack[0];
-    mCPU.memoryMap.mPPURegs->ppuctrl.nmi_enable = true;
-    mCPU.memoryMap.mPPURegs->ppustatus.vblank = true;
     mInstructions =
         {
             //          0        1        2
@@ -92,13 +90,20 @@ Processor::Processor()
             /* F */ {make_shared<Beq>(&mRegisters.pc, new Immediate, &mRegisters.flags), make_shared<Sub>(new Implied(&mRegisters.A), new IndirectY(mCPU, &mRegisters.Y), &mRegisters.flags), nullptr, nullptr, nullptr, make_shared<Sub>(new Implied(&mRegisters.A), new ZeroPageInd(mCPU, &mRegisters.X), &mRegisters.flags), make_shared<Inc>(new ZeroPageInd(mCPU, &mRegisters.X), &mRegisters.flags), nullptr, make_shared<SetDecimal>(&mRegisters.flags, true), make_shared<Sub>(new Implied(&mRegisters.A), new AbsoluteInd(mCPU, &mRegisters.Y), &mRegisters.flags), nullptr, nullptr, nullptr, make_shared<Sub>(new Implied(&mRegisters.A), new AbsoluteInd(mCPU, &mRegisters.X), &mRegisters.flags), make_shared<Inc>(new AbsoluteInd(mCPU, &mRegisters.X), &mRegisters.flags), nullptr}};
 }
 
-void Processor::loadFromFile(ifstream &file, size_t size)
+void Processor::loadFromFile(ifstream &file)
 {
-    file.read(reinterpret_cast<char *>(&mCPU.memoryMap.rom), sizeof(MemoryMap::rom) * size);
+    file.read(reinterpret_cast<char *>(&mCPU.memoryMap.rom), 0x4000 * mHeader.rpgSize);
+    mWarpNmiClock.start();
+    mCPU.memoryMap.mPPURegs->ppuctrl.nmi_enable = false;
 }
 
 void Processor::doStep()
 {
+    if (mNmiClock.getElapsedTime().asSeconds() >= 1.0 / 60.0)
+    {
+        nmi();
+        mNmiClock.restart();
+    }
     mCPU.memoryMap.mPPURegs->ppustatus.vblank = true;
 #ifdef DO_LOGS
     Logs::GetInstance().registers->info("{}", mRegisters);
@@ -125,8 +130,35 @@ bool Processor::eof() const
 
 void Processor::reset()
 {
+#ifdef DO_LOGS
+    Logs::GetInstance().pc_status->info("reset vector is launched");
+#endif
     Struct16_t buf = {.h = mCPU[RESET_INTERRUPT_LOACTION], .l = mCPU[RESET_INTERRUPT_LOACTION + 1]};
     mRegisters.pc = &mCPU[buf.raw];
+    mNmiClock.start();
+}
+
+void Processor::nmi()
+{
+    if (mCPU.memoryMap.mPPURegs->ppuctrl.nmi_enable == 1)
+    {
+#ifdef DO_LOGS
+        Logs::GetInstance().pc_status->info("nmi vector is launched");
+#endif
+        mCPU.memoryMap.mPPURegs->ppuctrl.nmi_enable = 0;
+        mCPU.memoryMap.mPPURegs->ppustatus.vblank = 0;
+        Struct16_t buf;
+        buf.raw = mRegisters.pc - (uint8_t *)&mCPU.memoryMap;
+        *mRegisters.sp = buf.h;
+        mRegisters.sp++;
+        *mRegisters.sp = buf.l;
+        mRegisters.sp++;
+        mRegisters.flags.Break = false;
+        *mRegisters.sp = mRegisters.flags.raw;
+
+        buf = {.h = mCPU[NMI_INTERRUPT_LOACTION], .l = mCPU[NMI_INTERRUPT_LOACTION + 1]};
+        mRegisters.pc = &mCPU[buf.raw];
+    }
 }
 
 CPU *Processor::getCPU()
@@ -137,4 +169,9 @@ CPU *Processor::getCPU()
 OAM *Processor::getOAM()
 {
     return &mCPU.memoryMap.mMirror->oam[0];
+}
+
+void Processor::setHeader(Header h)
+{
+    mHeader = h;
 }

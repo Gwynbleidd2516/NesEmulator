@@ -11,6 +11,7 @@ using namespace std;
 class NesProgram
 {
 private:
+    Header mHeader;
     Processor mProcessor;
     Render mRender;
 
