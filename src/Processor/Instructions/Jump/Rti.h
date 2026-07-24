@@ -4,6 +4,7 @@
 #include "Jump.h"
 #include "HasFlags.h"
 #include "Empty.h"
+#include"Struct16_t.h"
 
 class Rti : public Jump, public HasFlags
 {
@@ -15,17 +16,18 @@ public:
     void execute() override
     {
         Flags a;
-        memcpy(&a, *mSP, sizeof(Flags));
+        a.raw = **mSP;
         (*mSP)--;
         a.Break = false;
         a.Interrupt = false;
         *mFlags = a;
-        uint16_t buf = 0;
-        buf += **mSP;
+        Struct16_t buf;
+        buf.l = **mSP;
         (*mSP)--;
-        buf += **mSP;
+        buf.h = **mSP;
         (*mSP)--;
-        *mPC = (uint8_t *)mBegin + buf - 1;
+        *mPC = (uint8_t *)mBegin + buf.raw - 1;
+        mBegin->mPPURegs->ppuctrl.nmi_enable = true;
     }
 };
 
