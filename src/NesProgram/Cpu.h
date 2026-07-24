@@ -6,6 +6,7 @@
 using namespace std;
 
 #include "Ppu.h"
+#include "Struct16_t.h"
 
 struct OAM
 {
@@ -133,7 +134,15 @@ struct MemoryMap
     uint8_t expansionROM[8160];
 
     uint8_t ram[8192];
-    uint8_t rom[32768];
+    // uint8_t rom[32768];
+    struct
+    {
+        uint8_t rom1[0x4000];
+        uint8_t rom2[0x4000 - 0x6];
+        Struct16_t nmiVector;
+        Struct16_t resetVector;
+        Struct16_t irqVector;
+    };
 
     uint8_t &operator[](size_t i)
     {

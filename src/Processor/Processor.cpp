@@ -92,7 +92,15 @@ Processor::Processor()
 
 void Processor::loadFromFile(ifstream &file)
 {
-    file.read(reinterpret_cast<char *>(&mCPU.memoryMap.rom), 0x4000 * mHeader.rpgSize);
+    if (mHeader.rpgSize == 1)
+    {
+        file.read(reinterpret_cast<char *>(&mCPU.memoryMap.rom2), 0x4000 * mHeader.rpgSize);
+    }
+    else
+    {
+        file.read(reinterpret_cast<char *>(&mCPU.memoryMap.rom1), 0x4000 * mHeader.rpgSize);
+    }
+
     mWarpNmiClock.start();
     mCPU.memoryMap.mPPURegs->ppuctrl.nmi_enable = false;
 }
@@ -125,7 +133,7 @@ void Processor::doStep()
 
 bool Processor::eof() const
 {
-    return mRegisters.pc == &mCPU.memoryMap.rom[32767];
+    return false;
 }
 
 void Processor::reset()
@@ -133,8 +141,7 @@ void Processor::reset()
 #ifdef DO_LOGS
     Logs::GetInstance().pc_status->info("reset vector is launched");
 #endif
-    Struct16_t buf = {.h = mCPU[RESET_INTERRUPT_LOACTION], .l = mCPU[RESET_INTERRUPT_LOACTION + 1]};
-    mRegisters.pc = &mCPU[buf.raw];
+    mRegisters.pc = &mCPU[mCPU.memoryMap.resetVector.raw];
     mNmiClock.start();
 }
 
@@ -156,8 +163,7 @@ void Processor::nmi()
         mRegisters.flags.Break = false;
         *mRegisters.sp = mRegisters.flags.raw;
 
-        buf = {.h = mCPU[NMI_INTERRUPT_LOACTION], .l = mCPU[NMI_INTERRUPT_LOACTION + 1]};
-        mRegisters.pc = &mCPU[buf.raw];
+        mRegisters.pc = &mCPU[mCPU.memoryMap.nmiVector.raw];
     }
 }
 

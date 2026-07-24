@@ -11,10 +11,6 @@
 using namespace std;
 #include <SFML/System.hpp>
 
-#define NMI_INTERRUPT_LOACTION 0xFA
-#define RESET_INTERRUPT_LOACTION 0xFC
-#define IRQ_INTERRUPT_LOACTION 0xFE
-
 class Processor
 {
 private:
