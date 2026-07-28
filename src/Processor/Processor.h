@@ -24,7 +24,7 @@ private:
 public:
     Processor();
 
-    void doStep();
+    void launch();
 
     bool eof() const;
 

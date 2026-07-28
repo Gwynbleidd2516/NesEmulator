@@ -58,30 +58,27 @@ Processor::Processor()
 {
 }
 
-void Processor::doStep()
+void Processor::launch()
 {
-    if (mNmiClock.getElapsedTime().asSeconds() >= 1.0 / 60.0)
+    for (;; ++(mRegisters.pc))
     {
-        nmi();
-        mNmiClock.restart();
+        if (mNmiClock.getElapsedTime().asSeconds() >= 1.0f / 60.0f)
+        {
+            nmi();
+            mNmiClock.restart();
+        }
+        mCPU->memoryMap.mPPURegs->ppustatus.vblank = true;
+#ifdef DO_LOGS
+        Logs::GetInstance().registers->info("{}", mRegisters);
+#endif
+        shared_ptr<IInstruction> iter = mInstructions[*mRegisters.pc >> 0x4][*mRegisters.pc % 0x10];
+        iter->code(&mRegisters.pc);
+        iter->execute();
+#ifdef DO_LOGS
+        Logs::GetInstance().instruction = typeid(*iter).name() + 6;
+        Logs::GetInstance().print_pc_status();
+#endif
     }
-    mCPU->memoryMap.mPPURegs->ppustatus.vblank = true;
-#ifdef DO_LOGS
-    Logs::GetInstance().registers->info("{}", mRegisters);
-#endif
-
-    shared_ptr<IInstruction> iter = mInstructions[*mRegisters.pc >> 0x4][*mRegisters.pc % 0x10];
-
-#ifdef DO_LOGS
-    Logs::GetInstance().instruction = typeid(*iter).name() + 6;
-#endif
-
-    iter->code(&mRegisters.pc);
-    iter->execute();
-#ifdef DO_LOGS
-    Logs::GetInstance().print_pc_status();
-#endif
-    (mRegisters.pc)++;
 }
 
 bool Processor::eof() const
@@ -115,6 +112,7 @@ void Processor::nmi()
         mRegisters.sp++;
         mRegisters.flags.Break = false;
         *mRegisters.sp = mRegisters.flags.raw;
+        mRegisters.sp++;
 
         mRegisters.pc = &mCPU->at(mCPU->memoryMap.nmiVector.raw);
     }

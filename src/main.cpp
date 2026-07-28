@@ -8,12 +8,8 @@ int main(int argv, char **argc)
         if (argv == 2)
         {
             NesProgram pr;
-            pr.loadFile(argc[1]);
-        }
-        pr.reset();
-
-        while (!pr.isEnd())
-        {
+            pr.loadFromFile(argc[1]);
+            pr.reset();
             pr.step();
         }
         spdlog::shutdown();

@@ -88,54 +88,57 @@ bool Render::isOpen() const
 
 void Render::show()
 {
-    while (const std::optional event = mWindow.pollEvent())
+    while (mWindow.isOpen())
     {
-        if (event->is<sf::Event::Closed>())
-            mWindow.close();
-    }
-    mWindow.clear();
-
-    for (int i = 0; i < 32; i++)
-    {
-        for (int j = 0; j < 30; j++)
+        while (const std::optional event = mWindow.pollEvent())
         {
-            // Sprite buf = mPatternTable1[mPPU->mNametable0[i][j]];
-            // buf.setPosition(sf::Vector2f(8.0 * i, 8.0 * j));
-            // mWindow.draw(buf);
-            // buf = mPatternTable1[mPPU->mNametable1[i][j]];
-            // buf.setPosition(sf::Vector2f(8.0 * i + 256.0, 8.0 * j));
-            // mWindow.draw(buf);
-            // buf = mPatternTable1[mPPU->mNametable2[i][j]];
-            // buf.setPosition(sf::Vector2f(8.0 * i, 8.0 * j + 240.0));
-            // mWindow.draw(buf);
-            // buf = mPatternTable1[mPPU->mNametable3[i][j]];
-            // buf.setPosition(sf::Vector2f(8.0 * i + 256.0, 8.0 * j + 240.0));
-            // mWindow.draw(buf);
+            if (event->is<sf::Event::Closed>())
+                mWindow.close();
         }
-    }
+        mWindow.clear();
 
-    for (size_t i = 0; i < 64; i++)
-    {
-        // if (mCPU->memoryMap.mMirror->oam[i].bank == 0)
-        // {
-        //     Sprite buf = mPatternTable1[mCPU->memoryMap.mMirror->oam[i].tile];
-        //     buf.setPosition({(float)mCPU->memoryMap.mMirror->oam[i].x,
-        //                      (float)mCPU->memoryMap.mMirror->oam[i].y});
-        //     buf.setScale(Vector2f(-1.0f + !mCPU->memoryMap.mMirror->oam[i].flipHorizontally * 2.0f,
-        //                           -1.0f + !mCPU->memoryMap.mMirror->oam[i].flipVertically * 2.0f));
-        //     mWindow.draw(buf);
-        // }
-        // else
-        // {
-        //     Sprite buf = mPatternTable2[mCPU->memoryMap.mMirror->oam[i].tile];
-        //     buf.setPosition({(float)mCPU->memoryMap.mMirror->oam[i].x, (float)mCPU->memoryMap.mMirror->oam[i].y});
-        //     buf.setScale(Vector2f(-1.0f + !mCPU->memoryMap.mMirror->oam[i].flipHorizontally * 2.0f,
-        //                           -1.0f + !mCPU->memoryMap.mMirror->oam[i].flipVertically * 2.0f));
-        //     mWindow.draw(buf);
-        // }
-    }
+        for (int i = 0; i < 32; i++)
+        {
+            for (int j = 0; j < 30; j++)
+            {
+                // Sprite buf = mPatternTable1[mPPU->mNametable0[i][j]];
+                // buf.setPosition(sf::Vector2f(8.0 * i, 8.0 * j));
+                // mWindow.draw(buf);
+                // buf = mPatternTable1[mPPU->mNametable1[i][j]];
+                // buf.setPosition(sf::Vector2f(8.0 * i + 256.0, 8.0 * j));
+                // mWindow.draw(buf);
+                // buf = mPatternTable1[mPPU->mNametable2[i][j]];
+                // buf.setPosition(sf::Vector2f(8.0 * i, 8.0 * j + 240.0));
+                // mWindow.draw(buf);
+                // buf = mPatternTable1[mPPU->mNametable3[i][j]];
+                // buf.setPosition(sf::Vector2f(8.0 * i + 256.0, 8.0 * j + 240.0));
+                // mWindow.draw(buf);
+            }
+        }
 
-    mWindow.display();
+        for (size_t i = 0; i < 64; i++)
+        {
+            // if (mCPU->memoryMap.mMirror->oam[i].bank == 0)
+            // {
+            //     Sprite buf = mPatternTable1[mCPU->memoryMap.mMirror->oam[i].tile];
+            //     buf.setPosition({(float)mCPU->memoryMap.mMirror->oam[i].x,
+            //                      (float)mCPU->memoryMap.mMirror->oam[i].y});
+            //     buf.setScale(Vector2f(-1.0f + !mCPU->memoryMap.mMirror->oam[i].flipHorizontally * 2.0f,
+            //                           -1.0f + !mCPU->memoryMap.mMirror->oam[i].flipVertically * 2.0f));
+            //     mWindow.draw(buf);
+            // }
+            // else
+            // {
+            //     Sprite buf = mPatternTable2[mCPU->memoryMap.mMirror->oam[i].tile];
+            //     buf.setPosition({(float)mCPU->memoryMap.mMirror->oam[i].x, (float)mCPU->memoryMap.mMirror->oam[i].y});
+            //     buf.setScale(Vector2f(-1.0f + !mCPU->memoryMap.mMirror->oam[i].flipHorizontally * 2.0f,
+            //                           -1.0f + !mCPU->memoryMap.mMirror->oam[i].flipVertically * 2.0f));
+            //     mWindow.draw(buf);
+            // }
+        }
+
+        mWindow.display();
+    }
 }
 
 void Render::setCPU(CPU *cpu)

@@ -22,7 +22,9 @@ private:
 public:
     NesProgram();
 
-    void loadFile(string path);
+    void loadFromFile(string path);
+
+    void loadFromStream(istream &stream);
 
     void step();
 
