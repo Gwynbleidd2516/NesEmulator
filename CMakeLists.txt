@@ -55,6 +55,8 @@ message(--INCLUDE--> ${MY_INCLUDES})
 
 add_executable(main ${TARGET_SRC} ${TARGET_HEADERS})
 
+add_compile_definitions(DO_LOGS)
+
 target_include_directories(main PUBLIC ${MY_INCLUDES})
 
 target_link_libraries(main PRIVATE SFML::System SFML::Window SFML::Graphics SFML::Audio)

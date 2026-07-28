@@ -1,8 +1,6 @@
 #ifndef LOGS
 #define LOGS
 
-// #define DO_LOGS
-
 #ifdef DO_LOGS
 
 #include "spdlog/spdlog.h"
