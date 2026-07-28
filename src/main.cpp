@@ -7,10 +7,10 @@ int main(int argv, char **argc)
     {
         if (argv == 2)
         {
+            NesProgram pr;
+            pr.loadFile(argc[1]);
         }
-        NesProgram pr;
-        // pr.loadFile("../tests/Mario.nes");
-        pr.loadFile("../tests/game.nes");
+        pr.reset();
 
         while (!pr.isEnd())
         {
