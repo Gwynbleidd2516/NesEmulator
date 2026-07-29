@@ -1,7 +1,9 @@
 #include "NesProgram.h"
 #include <fstream>
+#include <iostream>
 
-NesProgram::NesProgram()
+NesProgram::NesProgram() : mProcessorThread(&NesProgram::processThread, this),
+                           mRenderThread(&NesProgram::renderThread, this)
 {
 }
 
@@ -22,8 +24,6 @@ void NesProgram::loadFromStream(istream &stream)
         throw runtime_error("This is not a nes file");
     }
 
-    mProcessor.setHeader(mHeader);
-
     if (mHeader.rpgSize == 1)
     {
         stream.read(reinterpret_cast<char *>(&mCPU.memoryMap.rom2), 0x4000 * mHeader.rpgSize);
@@ -32,27 +32,50 @@ void NesProgram::loadFromStream(istream &stream)
     {
         stream.read(reinterpret_cast<char *>(&mCPU.memoryMap.rom1), 0x4000 * mHeader.rpgSize);
     }
-    mCPU.memoryMap.mPPURegs->ppuctrl.nmi_enable = false;
 
     stream.read(reinterpret_cast<char *>(&mPPU), 0x2000 * mHeader.chrSize);
     mCPU.ppu = &mPPU;
-    mProcessor.setCPU(&mCPU);
-    mRender.setCPU(&mCPU);
-    mRender.setPPU(&mPPU);
+    mIsRunningAtomic.store(true);
+    mLoadSemaphoreProc.release();
+    mLoadSemaphoreRender.release();
 }
 
 void NesProgram::step()
 {
-    mProcessor.launch();
-    mRender.show();
-}
-
-bool NesProgram::isEnd() const
-{
-    return !mRender.isOpen();
+    mLaunchSemaphoreProc.release();
+    mLaunchSemaphoreRender.release();
+    mProcessorThread.join();
+    mRenderThread.join();
 }
 
 void NesProgram::reset()
 {
-    mProcessor.reset();
+    // mProcessor.reset();
+}
+
+void NesProgram::processThread()
+{
+    mLoadSemaphoreProc.acquire();
+
+    Processor processor;
+    processor.setHeader(mHeader);
+    processor.setCPU(&mCPU);
+    processor.setIsRunningAtomic(&mIsRunningAtomic);
+    mLaunchSemaphoreProc.acquire();
+
+    processor.reset();
+    processor.launch();
+}
+
+void NesProgram::renderThread()
+{
+    mLoadSemaphoreRender.acquire();
+
+    Render render;
+    render.setCPU(&mCPU);
+    render.setPPU(&mPPU);
+    render.setIsRunningAtomic(&mIsRunningAtomic);
+    mLaunchSemaphoreRender.acquire();
+
+    render.show();
 }

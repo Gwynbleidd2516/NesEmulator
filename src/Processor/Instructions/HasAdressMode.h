@@ -24,7 +24,7 @@ public:
 
     ~HasAdressMode()
     {
-        delete mAdressMode;
+        // delete mAdressMode;
     }
 };
 

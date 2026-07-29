@@ -73,7 +73,6 @@ void Render::loadFromFile(ifstream &file)
 
     for (size_t i = 0; i < 256; i++)
     {
-        int a = i / 16;
         Sprite sp1(mTextueBank1, IntRect({(i % 16) * 8, (int)(i / 16) * 8}, {8, 8}));
         Sprite sp2(mTextueBank2, IntRect({(i % 16) * 8, (int)(i / 16) * 8}, {8, 8}));
         mPatternTable1.push_back(sp1);
@@ -93,7 +92,10 @@ void Render::show()
         while (const std::optional event = mWindow.pollEvent())
         {
             if (event->is<sf::Event::Closed>())
+            {
+                mIsRunning->store(false);
                 mWindow.close();
+            }
         }
         mWindow.clear();
 
@@ -154,4 +156,9 @@ void Render::setPPU(PPU *ppu)
 void Render::setHeader(Header h)
 {
     mHeader = h;
+}
+
+void Render::setIsRunningAtomic(atomic<bool> *atm)
+{
+    mIsRunning = atm;
 }

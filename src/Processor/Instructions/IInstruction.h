@@ -12,6 +12,8 @@ public:
     virtual void execute() = 0;
 
     virtual void code(uint8_t **) = 0;
+
+    virtual ~IInstruction() {}
 };
 
 #endif

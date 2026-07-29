@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <vector>
+#include <atomic>
 using namespace std;
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
@@ -24,6 +25,8 @@ private:
     CPU *mCPU;
     PPU *mPPU;
     Header mHeader;
+    
+    atomic<bool> *mIsRunning;
 
 public:
     Render();
@@ -39,6 +42,8 @@ public:
     void setPPU(PPU* ppu);
 
     void setHeader(Header h);
+
+    void setIsRunningAtomic(atomic<bool> *atm);
 };
 
 #endif

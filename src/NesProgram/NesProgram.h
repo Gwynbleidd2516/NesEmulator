@@ -3,6 +3,9 @@
 
 #include <string>
 #include <vector>
+#include <thread>
+#include <semaphore>
+#include <atomic>
 using namespace std;
 
 #include "Processor.h"
@@ -14,10 +17,15 @@ private:
     Header mHeader;
     CPU mCPU;
     PPU mPPU;
-    Processor mProcessor;
-    Render mRender;
+    thread mProcessorThread;
+    thread mRenderThread;
+    binary_semaphore mLoadSemaphoreProc{0};
+    binary_semaphore mLoadSemaphoreRender{0};
+    binary_semaphore mLaunchSemaphoreProc{0};
+    binary_semaphore mLaunchSemaphoreRender{0};
+    atomic<bool> mIsRunningAtomic;
 
-    vector<vector<shared_ptr<IInstruction>>> mInstructions;
+    vector<vector<unique_ptr<IInstruction>>> mInstructions;
 
 public:
     NesProgram();
@@ -28,9 +36,12 @@ public:
 
     void step();
 
-    bool isEnd() const;
-
     void reset();
+
+private:
+    void processThread();
+
+    void renderThread();
 };
 
 #endif

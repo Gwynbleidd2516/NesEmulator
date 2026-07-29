@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <fstream>
+#include <atomic>
 #include "IInstruction.h"
 #include "Registers.h"
 #include "Flags.h"
@@ -20,6 +21,7 @@ private:
     CPU *mCPU;
     sf::Clock mNmiClock;
     sf::Clock mWarpNmiClock;
+    atomic<bool> *mIsRunning;
 
 public:
     Processor();
@@ -37,6 +39,8 @@ public:
     void setPPU(PPU *ppu);
 
     void setHeader(Header h);
+
+    void setIsRunningAtomic(atomic<bool> *atm);
 };
 
 #endif
