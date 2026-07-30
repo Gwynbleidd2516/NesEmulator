@@ -72,6 +72,10 @@ void Processor::launch()
         Logs::GetInstance().registers->info("{}", mRegisters);
 #endif
         IInstruction *iter = mInstructions[*mRegisters.pc >> 0x4][*mRegisters.pc % 0x10].get();
+        if (iter == nullptr)
+        {
+            continue;
+        }
         iter->code(&mRegisters.pc);
         iter->execute();
 #ifdef DO_LOGS
