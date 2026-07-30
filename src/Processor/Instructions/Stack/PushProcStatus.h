@@ -24,8 +24,8 @@ public:
     {
         Flags buf = *mFlags;
         buf.Break = true;
+        (*mStack)--;
         **mStack = buf.raw;
-        (*mStack)++;
     }
 };
 

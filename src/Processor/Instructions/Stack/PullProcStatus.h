@@ -22,8 +22,8 @@ public:
 
     void execute() override
     {
-        (*mStack)--;
-        memcpy(mFlags, *mStack, sizeof(Flags));
+        mFlags->raw = **mStack;
+        (*mStack)++;
     }
 };
 

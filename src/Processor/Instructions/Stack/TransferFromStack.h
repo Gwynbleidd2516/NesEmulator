@@ -11,12 +11,14 @@ class TransferFromStack : public IInstruction, public HasFlags
 private:
     Index *mIndex;
     uint8_t **mStack;
+    CPU *mBegin;
 
 public:
-    TransferFromStack(Index *index, uint8_t **stack, Flags *fl) : HasFlags(fl)
+    TransferFromStack(CPU *cpu, Index *index, uint8_t **stack, Flags *fl) : HasFlags(fl)
     {
         mIndex = index;
         mStack = stack;
+        mBegin = cpu;
     }
 
     void code(uint8_t **) override
@@ -25,11 +27,10 @@ public:
 
     void execute() override
     {
-        (*mStack)--;
-        mFlags->Zero = (**mStack == 0);
-        mFlags->Negative = (**mStack >> 7);
-        mIndex->setValue(**mStack);
-        (*mStack)++;
+        uint8_t buf = (uint8_t *)mBegin->memoryMap.mMirror->stack - *mStack;
+        mFlags->Zero = (buf == 0);
+        mFlags->Negative = (buf >> 7);
+        mIndex->setValue(buf);
     }
 };
 

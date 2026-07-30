@@ -15,17 +15,15 @@ public:
 
     void execute() override
     {
-        Flags a;
-        a.raw = **mSP;
-        (*mSP)--;
-        a.Break = false;
-        a.Interrupt = false;
-        *mFlags = a;
+        mFlags->raw = **mSP;
+        (*mSP)++;
+        mFlags->Break = false;
+        mFlags->Interrupt = false;
         Struct16_t buf;
         buf.l = **mSP;
-        (*mSP)--;
+        (*mSP)++;
         buf.h = **mSP;
-        (*mSP)--;
+        (*mSP)++;
         *mPC = (uint8_t *)mBegin + buf.raw - 1;
         mBegin->mPPURegs->ppuctrl.nmi_enable = true;
     }

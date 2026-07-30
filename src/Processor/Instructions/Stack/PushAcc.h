@@ -24,8 +24,8 @@ public:
 
     void execute() override
     {
+        (*mStack)--;
         **mStack = mAccumulator->getValue();
-        (*mStack)++;
     }
 };
 

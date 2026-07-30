@@ -10,12 +10,12 @@ public:
 
     void execute() override
     {
-        uint16_t buf = 0;
-        (*mSP)--;
-        buf += **mSP;
-        (*mSP)--;
-        buf += **mSP << 8;
-        *mPC = (uint8_t *)mBegin + buf;
+        Struct16_t addr;
+        addr.l = **mSP;
+        (*mSP)++;
+        addr.h = **mSP;
+        (*mSP)++;
+        *mPC = (uint8_t *)mBegin + addr.raw + 1;
     }
 };
 

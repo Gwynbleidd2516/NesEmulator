@@ -13,17 +13,17 @@ public:
 
     void execute() override
     {
-        uint16_t buf = *mPC - (uint8_t *)mBegin;
-        **mSP = buf >> 8;
-        (*mSP)++;
+        uint16_t buf = (uint16_t)(*mPC - (uint8_t *)mBegin) + 1;
+        (*mSP)--;
         **mSP = buf & 0xFF;
-        (*mSP)++;
+        (*mSP)--;
+        **mSP = (buf >> 8) & 0xFF;
         mFlags->Interrupt = true;
         Flags a = *mFlags;
         a.Break = true;
-        memcpy(*mSP, &a, sizeof(Flags));
-        (*mSP)++;
-        *mPC = (uint8_t *)mBegin + 0xFFFE;
+        (*mSP)--;
+        **mSP = a.raw;
+        *mPC = (uint8_t *)mBegin + mBegin->irqVector.raw;
     }
 };
 

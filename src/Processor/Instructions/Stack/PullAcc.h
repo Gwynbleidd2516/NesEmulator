@@ -25,12 +25,10 @@ public:
 
     void execute() override
     {
-        (*mStack)--;
         mFlags->Zero = (**mStack == 0);
         mFlags->Negative = (**mStack >> 7);
         mAccumulator->setValue(**mStack);
-        (**mStack) = 0;
-        // mAccumulator->operator=(mStack->pull());
+        (*mStack)++;
     }
 };
 
