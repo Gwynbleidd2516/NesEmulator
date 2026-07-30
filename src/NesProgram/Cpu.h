@@ -99,10 +99,9 @@ struct MemoryMap
 {
     struct RAM
     {
-        uint8_t zeroPage[416];
-        uint8_t stack[96];
-        OAM oam[64];
-        uint8_t other[1280];
+        uint8_t zeroPage[0x100];
+        uint8_t stack[0x100];
+        uint8_t extra[0x600];
     };
 
     RAM mMirror[4];
