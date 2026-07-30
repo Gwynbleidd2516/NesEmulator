@@ -14,6 +14,8 @@ public:
 
     virtual uint8_t getValue() const = 0;
 
+    virtual void setJumpPointer(uint16_t *ptr) {}
+
     virtual ~IAdressMode() {}
 };
 

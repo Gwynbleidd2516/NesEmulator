@@ -7,13 +7,9 @@
 
 class Shift : public HasAdressMode, public HasFlags
 {
-    // protected:
-    //     shared_ptr<Implied> mReg;
-
 public:
-    Shift(IAdressMode *adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
+    Shift(shared_ptr<IAdressMode> adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
     {
-        // mReg = reg;
     }
 };
 

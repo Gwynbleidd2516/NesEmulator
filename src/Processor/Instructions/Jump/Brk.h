@@ -7,7 +7,7 @@
 class Brk : public Jump, public HasFlags
 {
 public:
-    Brk(CPU *begin, IAdressMode *adressMode, uint8_t **SP, Flags *fl) : Jump(begin, adressMode, SP), HasFlags(fl)
+    Brk(CPU *begin, shared_ptr<IAdressMode> adressMode, uint8_t **SP, Flags *fl) : Jump(begin, adressMode, SP), HasFlags(fl)
     {
     }
 

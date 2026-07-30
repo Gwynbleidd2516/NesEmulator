@@ -44,7 +44,7 @@ public:
         return mCPU->read(mLocation);
     }
 
-    void setJumpPointer(uint16_t *j)
+    void setJumpPointer(uint16_t *j) override
     {
         mJump = j;
     }

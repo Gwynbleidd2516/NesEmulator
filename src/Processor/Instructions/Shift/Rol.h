@@ -14,7 +14,6 @@ public:
         mFlags->Carry = (mAdressMode->getValue() >> 7);
         mFlags->Zero = (mAdressMode->getValue() == 0);
         mFlags->Negative = (mAdressMode->getValue() >> 7);
-        // *(mAdressMode->getResult()) = *(mAdressMode->getResult()) << 1;
     }
 };
 

@@ -11,7 +11,7 @@ protected:
     Accumulator *mReg;
 
 public:
-    Bitwise(Accumulator *reg, IAdressMode *adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
+    Bitwise(Accumulator *reg, shared_ptr<IAdressMode> adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
     {
         mReg = reg;
     }

@@ -10,7 +10,7 @@ class Inc : public HasAdressMode, public HasFlags
 {
 
 public:
-    Inc(IAdressMode *adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
+    Inc(shared_ptr<IAdressMode> adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
     {
     }
 
@@ -20,7 +20,6 @@ public:
         mAdressMode->setValue(buf);
         mFlags->Zero = (buf == 0);
         mFlags->Negative = (buf >> 7);
-        // (*mAdressMode->getResult())++;
     }
 };
 

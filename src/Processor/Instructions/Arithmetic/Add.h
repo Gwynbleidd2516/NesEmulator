@@ -8,10 +8,10 @@
 class Add : public HasAdressMode, public HasFlags
 {
 private:
-    Implied *mReg;
+    shared_ptr<Implied> mReg;
 
 public:
-    Add(Implied *reg, IAdressMode *adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
+    Add(shared_ptr<Implied> reg, shared_ptr<IAdressMode> adressMode, Flags *fl) : HasAdressMode(adressMode), HasFlags(fl)
     {
         mReg = reg;
     }
@@ -28,8 +28,6 @@ public:
         mFlags->Overflow = ((ans ^ mReg->getValue()) & (ans & mAdressMode->getValue()) & 0x80);
         mFlags->Negative = (ans >> 7);
         mReg->setValue(mAdressMode->getValue());
-        // mReg->setValue(mReg->getValue() + mAdressMode->getValue());
-        // *mReg->getResult() += *mAdressMode->getResult();
     }
 };
 

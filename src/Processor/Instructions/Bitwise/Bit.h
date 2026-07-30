@@ -14,7 +14,6 @@ public:
         mFlags->Zero = (res == 0);
         mFlags->Overflow = ((res >> 6) % 2);
         mFlags->Negative = (res >> 7);
-        // *(mReg->getResult()) & *(mAdressMode->getResult());
     }
 };
 

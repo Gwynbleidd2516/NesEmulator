@@ -4,12 +4,12 @@
 #include "Jump.h"
 #include "HasFlags.h"
 #include "Empty.h"
-#include"Struct16_t.h"
+#include "Struct16_t.h"
 
 class Rti : public Jump, public HasFlags
 {
 public:
-    Rti(CPU *begin, uint8_t **SP, Flags *fl) : Jump(begin, new Empty, SP), HasFlags(fl)
+    Rti(CPU *begin, uint8_t **SP, Flags *fl) : Jump(begin, make_shared<Empty>(), SP), HasFlags(fl)
     {
     }
 

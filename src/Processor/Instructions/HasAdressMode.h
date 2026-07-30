@@ -9,12 +9,11 @@ using namespace std;
 class HasAdressMode : public IInstruction
 {
 protected:
-    IAdressMode *mAdressMode;
+    shared_ptr<IAdressMode> mAdressMode;
 
 public:
-    HasAdressMode(IAdressMode *adressMode)
+    HasAdressMode(shared_ptr<IAdressMode> adressMode) : mAdressMode(adressMode)
     {
-        mAdressMode = adressMode;
     }
 
     virtual void code(uint8_t **it) override
@@ -22,10 +21,7 @@ public:
         mAdressMode->code(it);
     }
 
-    ~HasAdressMode()
-    {
-        // delete mAdressMode;
-    }
+    ~HasAdressMode() override {}
 };
 
 #endif

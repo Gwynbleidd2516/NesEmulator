@@ -13,7 +13,7 @@ protected:
     uint16_t mJump;
 
 public:
-    Jump(CPU *begin, IAdressMode *adressMode, uint8_t **SP) : HasAdressMode(adressMode)
+    Jump(CPU *begin, shared_ptr<IAdressMode> adressMode, uint8_t **SP) : HasAdressMode(adressMode)
     {
         mBegin = &begin->memoryMap;
         mSP = SP;
@@ -21,7 +21,7 @@ public:
 
     void code(uint8_t **it) override
     {
-        ((Absolute *)mAdressMode)->setJumpPointer(&mJump);
+        mAdressMode->setJumpPointer(&mJump);
         mAdressMode->code(it);
         mPC = it;
     }

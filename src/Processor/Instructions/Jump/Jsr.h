@@ -18,7 +18,6 @@ public:
         **mSP = (buf & 0xFF);
         (*mSP)++;
         *mPC = (uint8_t *)mBegin + mJump - 1;
-        // *mPC = mAdressMode->getValue();
     }
 };
 

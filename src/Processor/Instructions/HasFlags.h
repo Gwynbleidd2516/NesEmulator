@@ -13,11 +13,6 @@ public:
     {
         mFlags = flags;
     }
-
-    // void setFlags(Flags *flags) override
-    // {
-    //     mFlags = flags;
-    // }
 };
 
 #endif
