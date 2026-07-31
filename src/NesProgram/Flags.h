@@ -16,7 +16,7 @@ union Flags
         bool Zero : 1;
         bool Carry : 1;
     };
-    uint8_t raw;
+    uint8_t raw = 0x0;
 };
 
 #endif

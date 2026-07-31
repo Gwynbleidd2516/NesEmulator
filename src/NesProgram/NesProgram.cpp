@@ -5,6 +5,8 @@
 NesProgram::NesProgram() : mProcessorThread(&NesProgram::processThread, this),
                            mRenderThread(&NesProgram::renderThread, this)
 {
+    memset(&mCPU.memoryMap, 0x0, sizeof(MemoryMap));
+    memset(&mPPU, 0x0, sizeof(PPU));
 }
 
 void NesProgram::loadFromFile(string path)
@@ -75,6 +77,7 @@ void NesProgram::renderThread()
     render.setCPU(&mCPU);
     render.setPPU(&mPPU);
     render.setIsRunningAtomic(&mIsRunningAtomic);
+    render.loadPattern();
     mLaunchSemaphoreRender.acquire();
 
     render.show();

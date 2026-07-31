@@ -7,7 +7,7 @@
 class Integer : public IRegister
 {
 protected:
-    uint8_t mValue;
+    uint8_t mValue = 0x0;
     Flags *mFlags;
 
 public:
