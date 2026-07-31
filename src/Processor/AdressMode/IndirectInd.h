@@ -8,7 +8,7 @@
 class IndirectX : public IAdressMode
 {
 private:
-    uint8_t mLocation;
+    uint16_t mLocation;
     CPU *mCPU;
     Index *mReg;
 
@@ -51,7 +51,7 @@ public:
 class IndirectY : public IAdressMode
 {
 private:
-    uint8_t mLocation;
+    uint16_t mLocation;
     CPU *mCPU;
     Index *mReg;
 
@@ -68,7 +68,7 @@ public:
         Struct16_t buf = {.h = mCPU->read(**(it)),
                           .l = mCPU->read(**(it) + 1)};
 
-        mLocation = (uint8_t)(buf.raw + mReg->getValue());
+        mLocation = (buf.raw + mReg->getValue());
 #ifdef DO_LOGS
         Logs::GetInstance().adressMode = typeid(*mReg).name() + 6;
 #endif
