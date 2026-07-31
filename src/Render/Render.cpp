@@ -135,10 +135,15 @@ void Render::show()
                 mWindow.draw(buf);
             }
         }
+        
+        if (mCPU->memoryMap.mPPURegs->ppuctrl.sprite_table == 0)
+            patternTable = &mPatternTable1;
+        else
+            patternTable = &mPatternTable2;
 
         for (size_t i = 0; i < 64; i++)
         {
-            Sprite buf = mPatternTable2[mCPU->oam[i].tile8x8];
+            Sprite buf = patternTable->at(mCPU->oam[i].tile8x8);
             buf.setPosition({(float)mCPU->oam[i].x,
                              (float)mCPU->oam[i].y});
             buf.setScale(Vector2f(-1.0f + !mCPU->memoryMap.mMirror->oam[i].flipHorizontally * 2.0f,
