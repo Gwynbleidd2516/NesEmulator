@@ -22,8 +22,8 @@ public:
     void code(uint8_t **it) override
     {
         (*it)++;
-        Struct16_t buf = {.h = mCPU->read(**(it) + mReg->getValue()),
-                          .l = mCPU->read(**(it) + mReg->getValue() + 1)};
+        Struct16_t buf = {.h = mCPU->read((uint8_t)(**(it) + mReg->getValue())),
+                          .l = mCPU->read((uint8_t)(**(it) + mReg->getValue() + 1))};
 
         mLocation = buf.raw;
 #ifdef DO_LOGS
@@ -68,7 +68,7 @@ public:
         Struct16_t buf = {.h = mCPU->read(**(it)),
                           .l = mCPU->read(**(it) + 1)};
 
-        mLocation = buf.raw + mReg->getValue();
+        mLocation = (uint8_t)(buf.raw + mReg->getValue());
 #ifdef DO_LOGS
         Logs::GetInstance().adressMode = typeid(*mReg).name() + 6;
 #endif
