@@ -25,13 +25,13 @@ private:
     CPU *mCPU;
     PPU *mPPU;
     Header mHeader;
-    
+
     atomic<bool> *mIsRunning;
 
 public:
     Render();
 
-    void loadFromFile(ifstream &file);
+    void loadPattern();
 
     bool isOpen() const;
 
@@ -39,7 +39,7 @@ public:
 
     void setCPU(CPU *cpu);
 
-    void setPPU(PPU* ppu);
+    void setPPU(PPU *ppu);
 
     void setHeader(Header h);
 
