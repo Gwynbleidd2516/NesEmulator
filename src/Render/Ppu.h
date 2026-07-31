@@ -10,13 +10,13 @@ struct PPU
     uint8_t mPatternTable0[0x1000];
     uint8_t mPatternTable1[0x1000];
 
-    uint8_t mNametable0[32][30];
+    uint8_t mNametable0[30][32];
     AttributeTable mAttributeTable0[0x40];
-    uint8_t mNametable1[32][30];
+    uint8_t mNametable1[30][32];
     AttributeTable mAttributeTable1[0x40];
-    uint8_t mNametable2[32][30];
+    uint8_t mNametable2[30][32];
     AttributeTable mAttributeTable2[0x40];
-    uint8_t mNametable3[32][30];
+    uint8_t mNametable3[30][32];
     AttributeTable mAttributeTable3[0x40];
 
     uint8_t mUnused[0xF00];
