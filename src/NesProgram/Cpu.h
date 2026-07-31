@@ -8,16 +8,28 @@ using namespace std;
 #include "Ppu.h"
 #include "Struct16_t.h"
 
-struct OAM
+union OAM
 {
-    uint8_t y;
-    uint8_t bank : 1;
-    uint8_t tile : 7;
-    uint8_t pallete : 2;
-    uint8_t unimplemented : 3;
-    bool flipHorizontally : 1;
-    bool flipVertically : 1;
-    uint8_t x;
+    struct
+    {
+        uint8_t y;
+        union
+        {
+            struct
+            {
+                uint8_t bank : 1;
+                uint8_t tile8x16 : 7;
+            };
+            uint8_t tile8x8;
+        };
+
+        uint8_t pallete : 2;
+        uint8_t unimplemented : 3;
+        bool flipHorizontally : 1;
+        bool flipVertically : 1;
+        uint8_t x;
+    };
+    uint8_t raw[4];
 };
 
 struct PPUCTRL
@@ -101,7 +113,8 @@ struct MemoryMap
     {
         uint8_t zeroPage[0x100];
         uint8_t stack[0x100];
-        uint8_t extra[0x600];
+        OAM oam[0x40];
+        uint8_t extra[0x500];
     };
 
     RAM mMirror[4];
@@ -161,10 +174,12 @@ struct CPU
     uint8_t ppuscrolly;
     bool ppuscrollLatch = false;
 
-    uint8_t ppuaddr_write : 6;
+    uint16_t ppuaddr_write = 0;
     bool ppuaddrLatch = false;
 
     PPU *ppu;
+
+    OAM oam[64];
 
     MemoryMap memoryMap;
     uint8_t &operator[](size_t i)
@@ -179,11 +194,20 @@ struct CPU
 
     void write(size_t i, uint8_t value)
     {
+        if (i < 0x2000)
+        {
+            i &= 0x7FF;
+        }
+        else if (i < 0x4000)
+        {
+            i &= 0x2007;
+        }
+
         uint8_t buf = memoryMap[i];
         switch (i)
         {
         case 0x2004:
-            memoryMap[0x200 + memoryMap.mPPURegs->oamaddr++] = value;
+            *((uint8_t *)&oam + memoryMap.mPPURegs->oamaddr++) = value;
             break;
 
         case 0x2005:
@@ -195,19 +219,20 @@ struct CPU
             break;
 
         case 0x2006:
-            if (ppuaddrLatch)
-                memoryMap[i] = value;
-            else
-                ppuaddr_write = value;
-            ppuaddrLatch = !ppuaddrLatch;
+            ppuaddr_write <<= 8;
+            ppuaddr_write += value;
             break;
 
         case 0x2007:
-            ppu->write(memoryMap.mPPURegs->ppuaddr, value);
-            memoryMap.mPPURegs->ppuaddr += 1 + memoryMap.mPPURegs->ppuctrl.increment * 31;
+            ppu->write(ppuaddr_write, value);
+            ppuaddr_write += 1 + memoryMap.mPPURegs->ppuctrl.increment * 31;
             break;
         case 0x4014:
-            memoryMap[0x200 + memoryMap.mPPURegs->oamaddr++] = value;
+            for (int i = 0; i < 256; i++)
+            {
+                write(0x2004, read((value << 8) + i));
+            }
+
             break;
         default:
             at(i) = value;
@@ -220,6 +245,14 @@ struct CPU
 
     uint8_t read(size_t i)
     {
+        if (i < 0x2000)
+        {
+            i &= 0x7FF;
+        }
+        else if (i < 0x4000)
+        {
+            i &= 0x2007;
+        }
         uint8_t buf = memoryMap[i];
         uint8_t ans;
         switch (i)
@@ -232,11 +265,11 @@ struct CPU
             break;
 
         case 0x2004:
-            return memoryMap[0x200 + memoryMap.mPPURegs->oamaddr++];
+            return *((uint8_t *)&oam + memoryMap.mPPURegs->oamaddr++);
             break;
 
         case 0x2007:
-            ans = ppu->read(memoryMap.mPPURegs->ppuaddr);
+            ans = ppu->read((ppuaddr_write << 8) + memoryMap.mPPURegs->ppuaddr);
             memoryMap.mPPURegs->ppuaddr += 1 + memoryMap.mPPURegs->ppuctrl.increment * 31;
             return ans;
             break;
