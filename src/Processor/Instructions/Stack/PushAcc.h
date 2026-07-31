@@ -9,13 +9,15 @@ class PushAcc : public IInstruction
 {
 private:
     Accumulator *mAccumulator;
-    uint8_t **mStack;
+    uint8_t *mStack;
+    MemoryMap *mBegin;
 
 public:
-    PushAcc(Accumulator *accumulator, uint8_t **stack)
+    PushAcc(CPU *cpu, Accumulator *accumulator, uint8_t *stack)
     {
         mAccumulator = accumulator;
         mStack = stack;
+        mBegin = &cpu->memoryMap;
     }
 
     void code(uint8_t **) override
@@ -24,8 +26,7 @@ public:
 
     void execute() override
     {
-        (*mStack)--;
-        **mStack = mAccumulator->getValue();
+        mBegin->mMirror->stack[--(*mStack)] = mAccumulator->getValue();
     }
 };
 

@@ -15,7 +15,7 @@ struct Registers
     Index Y;
     Flags flags;
     // StackPointer sp;
-    uint8_t *sp;
+    uint8_t sp;
     uint8_t *pc;
 };
 
@@ -46,7 +46,7 @@ namespace fmt
             return fmt::format_to(
                 ctx.out(),
                 "A={:x}, X={:x}, Y={:x}, flags={:b}, sp={:x}, pc={:x}",
-                r.A.getValue(), r.X.getValue(), r.Y.getValue(), r.flags.raw, *r.sp, *r.pc);
+                r.A.getValue(), r.X.getValue(), r.Y.getValue(), r.flags.raw, r.sp, *r.pc);
         }
     };
 } // namespace fmt

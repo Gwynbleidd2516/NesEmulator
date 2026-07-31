@@ -11,10 +11,8 @@ public:
     void execute() override
     {
         Struct16_t addr;
-        addr.l = **mSP;
-        (*mSP)++;
-        addr.h = **mSP;
-        (*mSP)++;
+        addr.l = mBegin->mMirror->stack[(*mSP)++];
+        addr.h = mBegin->mMirror->stack[(*mSP)++];
         *mPC = (uint8_t *)mBegin + addr.raw + 1;
     }
 };

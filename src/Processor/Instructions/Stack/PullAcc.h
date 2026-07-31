@@ -10,13 +10,15 @@ class PullAcc : public IInstruction, public HasFlags
 {
 private:
     Accumulator *mAccumulator;
-    uint8_t **mStack;
+    uint8_t *mStack;
+    MemoryMap *mBegin;
 
 public:
-    PullAcc(Accumulator *accumulator, uint8_t **stack, Flags *fl) : HasFlags(fl)
+    PullAcc(CPU *cpu, Accumulator *accumulator, uint8_t *stack, Flags *fl) : HasFlags(fl)
     {
         mAccumulator = accumulator;
         mStack = stack;
+        mBegin = &cpu->memoryMap;
     }
 
     void code(uint8_t **) override
@@ -25,9 +27,9 @@ public:
 
     void execute() override
     {
-        mFlags->Zero = (**mStack == 0);
-        mFlags->Negative = (**mStack >> 7);
-        mAccumulator->setValue(**mStack);
+        mFlags->Zero = (mBegin->mMirror->stack[*mStack] == 0);
+        mFlags->Negative = (mBegin->mMirror->stack[*mStack] >> 7);
+        mAccumulator->setValue(mBegin->mMirror->stack[*mStack]);
         (*mStack)++;
     }
 };

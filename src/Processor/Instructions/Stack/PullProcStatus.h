@@ -7,13 +7,15 @@ class PullProcStatus : public IInstruction
 {
 private:
     Flags *mFlags;
-    uint8_t **mStack;
+    uint8_t *mStack;
+    MemoryMap *mBegin;
 
 public:
-    PullProcStatus(Flags *flags, uint8_t **stack)
+    PullProcStatus(CPU *cpu, Flags *flags, uint8_t *stack)
     {
         mFlags = flags;
         mStack = stack;
+        mBegin = &cpu->memoryMap;
     }
 
     void code(uint8_t **) override
@@ -22,8 +24,7 @@ public:
 
     void execute() override
     {
-        mFlags->raw = **mStack;
-        (*mStack)++;
+        mFlags->raw = mBegin->mMirror->stack[(*mStack)++];
     }
 };
 

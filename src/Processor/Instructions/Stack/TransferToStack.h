@@ -9,15 +9,13 @@ class TransferToStack : public IInstruction
 {
 private:
     Index *mIndex;
-    uint8_t **mStack;
-    CPU *mBegin;
+    uint8_t *mStack;
 
 public:
-    TransferToStack(CPU *cpu, Index *index, uint8_t **stack)
+    TransferToStack(Index *index, uint8_t *stack)
     {
         mIndex = index;
         mStack = stack;
-        mBegin = cpu;
     }
 
     void code(uint8_t **) override
@@ -26,7 +24,7 @@ public:
 
     void execute() override
     {
-        *mStack = (uint8_t *)mBegin->memoryMap.mMirror->stack + mIndex->getValue();
+        *mStack = mIndex->getValue();
     }
 };
 

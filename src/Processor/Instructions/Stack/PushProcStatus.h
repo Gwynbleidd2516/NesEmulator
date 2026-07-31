@@ -7,13 +7,15 @@ class PushProcStatus : public IInstruction
 {
 private:
     Flags *mFlags;
-    uint8_t **mStack;
+    uint8_t *mStack;
+    MemoryMap *mBegin;
 
 public:
-    PushProcStatus(Flags *flags, uint8_t **stack)
+    PushProcStatus(CPU *cpu, Flags *flags, uint8_t *stack)
     {
         mFlags = flags;
         mStack = stack;
+        mBegin = &cpu->memoryMap;
     }
 
     void code(uint8_t **) override
@@ -24,8 +26,7 @@ public:
     {
         Flags buf = *mFlags;
         buf.Break = true;
-        (*mStack)--;
-        **mStack = buf.raw;
+        mBegin->mMirror->stack[--(*mStack)] = buf.raw;
     }
 };
 
