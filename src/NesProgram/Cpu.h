@@ -228,7 +228,7 @@ struct CPU
         case 0x4014:
             for (int i = 0; i < 256; i++)
             {
-                write(0x2004, read((value << 8) + i));
+                *((uint8_t *)&oam + i) = read((value << 8) + i);
             }
 
             break;
