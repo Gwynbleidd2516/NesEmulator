@@ -10,10 +10,13 @@ public:
 
     void execute() override
     {
-        mAdressMode->setValue(mAdressMode->getValue() << 1);
-        mFlags->Carry = (mAdressMode->getValue() >> 7);
-        mFlags->Zero = (mAdressMode->getValue() == 0);
-        mFlags->Negative = (mAdressMode->getValue() >> 7);
+        uint8_t old = mAdressMode->getValue();
+        uint8_t newCarry = (old & 0x80) ? 1 : 0;
+        uint8_t shifted = (old << 1) | (mFlags->Carry ? 1 : 0);
+        mFlags->Carry = newCarry;
+        mFlags->Zero = (shifted == 0);
+        mFlags->Negative = shifted & 0x80;
+        mAdressMode->setValue(shifted);
     }
 };
 
