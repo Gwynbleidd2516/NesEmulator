@@ -106,7 +106,6 @@ struct PPURegisters
     PPUDATA ppudata;
 };
 
-#pragma pack(push, 1)
 struct MemoryMap
 {
     struct RAM
@@ -167,7 +166,6 @@ struct MemoryMap
     }
 };
 
-#pragma pack(pop)
 
 struct CPU
 {
