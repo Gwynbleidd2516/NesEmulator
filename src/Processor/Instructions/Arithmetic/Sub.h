@@ -18,16 +18,14 @@ public:
 
     void execute() override
     {
-        int sign = 1;
-        if (mFlags->Overflow)
-            sign = -1;
-        uint8_t ans = mReg->getValue() - sign * mAdressMode->getValue() + !mFlags->Carry;
-        int buf = mReg->getValue() - sign * mAdressMode->getValue() + !mFlags->Carry;
-        mFlags->Carry = (buf < 0);
-        mFlags->Zero = (mAdressMode->getValue() == 0);
-        mFlags->Overflow = ((ans ^ mReg->getValue()) & (ans & mAdressMode->getValue()) & 0x80);
-        mFlags->Negative = (ans >> 7);
-        mReg->setValue(mReg->getValue() - mAdressMode->getValue());
+        uint8_t operand = mAdressMode->getValue();
+        uint8_t borrow = mFlags->Carry ? 0 : 1; // если Carry=1, то вычитание без заёма
+        int16_t result = mReg->getValue() - operand - borrow;
+        mFlags->Carry = (result >= 0);
+        mFlags->Zero = ((result & 0xFF) == 0);
+        mFlags->Overflow = (((mReg->getValue() ^ operand) & 0x80) && ((mReg->getValue() ^ (uint8_t)result) & 0x80));
+        mFlags->Negative = (result & 0x80);
+        mReg->setValue(result & 0xFF);
     }
 };
 
