@@ -24,7 +24,7 @@ public:
     bool getBit(uint8_t i) const
     {
         i = i % 8;
-        uint8_t mask = pow(2, i);
+        uint8_t mask = 1 << i;
         uint8_t buf = mMemory & mask;
 
         return buf >> i;
@@ -33,7 +33,7 @@ public:
     void setBit(uint8_t i, bool val)
     {
         i = i % 8;
-        uint8_t mask = pow(2, i);
+        uint8_t mask = 1 << i;
         if (val)
         {
             mMemory |= mask;
