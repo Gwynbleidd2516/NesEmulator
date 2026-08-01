@@ -83,7 +83,7 @@ void Render::show()
                 mWindow.close();
             }
         }
-        mWindow.clear();
+        // mWindow.clear();
 
         // vector<Sprite> &table = mPatternTable2;
 
@@ -138,8 +138,9 @@ void Render::show()
             for (size_t i = 0; i < 64; i++)
             {
                 Sprite buf = patternTable->at(mCPU->oam[i].tile8x8);
-                buf.setPosition({(float)mCPU->oam[i].x,
-                                 (float)mCPU->oam[i].y});
+                buf.setPosition({(float)mCPU->oam[i].x + 4.f,
+                                 (float)mCPU->oam[i].y + 4.f});
+                buf.setOrigin({4.f, 4.f});
                 buf.setScale(Vector2f(-1.0f + !mCPU->memoryMap.mMirror->oam[i].flipHorizontally * 2.0f,
                                       -1.0f + !mCPU->memoryMap.mMirror->oam[i].flipVertically * 2.0f));
                 mWindow.draw(buf);
