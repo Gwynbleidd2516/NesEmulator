@@ -101,45 +101,50 @@ void Render::show()
 
         vector<Sprite> *patternTable;
 
-        if (mCPU->memoryMap.mPPURegs->ppuctrl.background_table == 0)
-            patternTable = &mPatternTable1;
-        else
-            patternTable = &mPatternTable2;
-
-        for (int i = 0; i < 30; i++)
+        if (mCPU->memoryMap.mPPURegs->ppumask.show_background == 1)
         {
-            for (int j = 0; j < 32; j++)
+            if (mCPU->memoryMap.mPPURegs->ppuctrl.background_table == 0)
+                patternTable = &mPatternTable1;
+            else
+                patternTable = &mPatternTable2;
+
+            for (int i = 0; i < 30; i++)
             {
-                Sprite buf = patternTable->at(mPPU->mNametable0[i][j]);
-                buf.setPosition(sf::Vector2f(8.0f * j, 8.0f * i));
-                mWindow.draw(buf);
-                buf = patternTable->at(mPPU->mNametable1[i][j]);
-                buf.setPosition(sf::Vector2f(8.0f * j + 256.0f, 8.0f * i));
-                mWindow.draw(buf);
-                buf = patternTable->at(mPPU->mNametable2[i][j]);
-                buf.setPosition(sf::Vector2f(8.0f * j, 8.0f * i + 240.0f));
-                mWindow.draw(buf);
-                buf = patternTable->at(mPPU->mNametable3[i][j]);
-                buf.setPosition(sf::Vector2f(8.0f * j + 256.0f, 8.0f * i + 240.0f));
-                mWindow.draw(buf);
+                for (int j = 0; j < 32; j++)
+                {
+                    Sprite buf = patternTable->at(mPPU->mNametable0[i][j]);
+                    buf.setPosition(sf::Vector2f(8.0f * j, 8.0f * i));
+                    mWindow.draw(buf);
+                    buf = patternTable->at(mPPU->mNametable1[i][j]);
+                    buf.setPosition(sf::Vector2f(8.0f * j + 256.0f, 8.0f * i));
+                    mWindow.draw(buf);
+                    buf = patternTable->at(mPPU->mNametable2[i][j]);
+                    buf.setPosition(sf::Vector2f(8.0f * j, 8.0f * i + 240.0f));
+                    mWindow.draw(buf);
+                    buf = patternTable->at(mPPU->mNametable3[i][j]);
+                    buf.setPosition(sf::Vector2f(8.0f * j + 256.0f, 8.0f * i + 240.0f));
+                    mWindow.draw(buf);
+                }
             }
         }
 
-        if (mCPU->memoryMap.mPPURegs->ppuctrl.sprite_table == 0)
-            patternTable = &mPatternTable1;
-        else
-            patternTable = &mPatternTable2;
-
-        for (size_t i = 0; i < 64; i++)
+        if (mCPU->memoryMap.mPPURegs->ppumask.show_sprites == 1)
         {
-            Sprite buf = patternTable->at(mCPU->oam[i].tile8x8);
-            buf.setPosition({(float)mCPU->oam[i].x,
-                             (float)mCPU->oam[i].y});
-            buf.setScale(Vector2f(-1.0f + !mCPU->memoryMap.mMirror->oam[i].flipHorizontally * 2.0f,
-                                  -1.0f + !mCPU->memoryMap.mMirror->oam[i].flipVertically * 2.0f));
-            mWindow.draw(buf);
-        }
+            if (mCPU->memoryMap.mPPURegs->ppuctrl.sprite_table == 0)
+                patternTable = &mPatternTable1;
+            else
+                patternTable = &mPatternTable2;
 
+            for (size_t i = 0; i < 64; i++)
+            {
+                Sprite buf = patternTable->at(mCPU->oam[i].tile8x8);
+                buf.setPosition({(float)mCPU->oam[i].x,
+                                 (float)mCPU->oam[i].y});
+                buf.setScale(Vector2f(-1.0f + !mCPU->memoryMap.mMirror->oam[i].flipHorizontally * 2.0f,
+                                      -1.0f + !mCPU->memoryMap.mMirror->oam[i].flipVertically * 2.0f));
+                mWindow.draw(buf);
+            }
+        }
         mWindow.display();
     }
 }
