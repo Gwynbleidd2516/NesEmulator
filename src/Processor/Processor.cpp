@@ -63,10 +63,10 @@ void Processor::launch()
 {
     for (; mIsRunning->load(); ++(mRegisters.pc))
     {
-        if (mNmiClock.getElapsedTime().asSeconds() >= 1.0f / 60.0f)
+        if (std::chrono::duration<double>(Clock::now() - mNmiClock).count() >= 1.f / 60.f)
         {
             nmi();
-            mNmiClock.restart();
+            mNmiClock = Clock::now();
         }
         mCPU->memoryMap.mPPURegs->ppustatus.vblank = true;
 #ifdef DO_LOGS
@@ -97,7 +97,7 @@ void Processor::reset()
     Logs::GetInstance().pc_status->info("reset vector is launched");
 #endif
     mRegisters.pc = &mCPU->at(mCPU->memoryMap.resetVector.raw);
-    mNmiClock.start();
+    mNmiClock = Clock::now();
 }
 
 void Processor::nmi()

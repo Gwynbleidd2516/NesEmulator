@@ -2,15 +2,16 @@
 #define PROCESSOR
 
 #include <vector>
-#include <fstream>
 #include <atomic>
+#include <chrono>
 #include "IInstruction.h"
 #include "Registers.h"
 #include "Flags.h"
 #include "Cpu.h"
 #include "Header.h"
 using namespace std;
-#include <SFML/System.hpp>
+
+using Clock = chrono::system_clock;
 
 class Processor
 {
@@ -19,8 +20,7 @@ private:
     Registers mRegisters;
     Header mHeader;
     CPU *mCPU;
-    sf::Clock mNmiClock;
-    sf::Clock mWarpNmiClock;
+    Clock::time_point mNmiClock;
     atomic<bool> *mIsRunning;
 
 public:
