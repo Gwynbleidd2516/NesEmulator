@@ -25,8 +25,8 @@ union OAM
 
         uint8_t pallete : 2;
         uint8_t unimplemented : 3;
-        bool flipHorizontally : 1;
         bool flipVertically : 1;
+        bool flipHorizontally : 1;
         uint8_t x;
     };
     uint8_t raw[4];
