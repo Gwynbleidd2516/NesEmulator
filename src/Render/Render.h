@@ -15,6 +15,7 @@ class Render
 {
 private:
     RenderWindow mWindow;
+    View mView;
 
     Texture mTextueBank1;
     Texture mTextueBank2;

@@ -171,7 +171,7 @@ struct MemoryMap
 
 struct CPU
 {
-    uint8_t ppuscrolly;
+    uint8_t ppuscrollx;
     bool ppuscrollLatch = false;
 
     uint16_t ppuaddr_write = 0;
@@ -214,7 +214,7 @@ struct CPU
             if (ppuscrollLatch)
                 memoryMap[i] = value;
             else
-                ppuscrolly = value;
+                ppuscrollx = value;
             ppuscrollLatch = !ppuscrollLatch;
             break;
 

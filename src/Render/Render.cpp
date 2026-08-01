@@ -2,11 +2,12 @@
 #include <iostream>
 #include <DiscreteVal.h>
 
-Render::Render()
+Render::Render() : mView({256.f / 2.f, 240.f / 2.f}, {256.f, 240.f - 16.0f})
 {
     mTextueBank1.resize(Vector2u(16 * 8, 16 * 8));
     mTextueBank2.resize(Vector2u(16 * 8, 16 * 8));
-    mWindow.create(VideoMode({800, 600}), "NES emu");
+    mWindow.create(VideoMode({256 * 2, (240 - 16) * 2}), "NES emu");
+    mWindow.setView(mView);
 }
 
 void Render::loadPattern()
@@ -95,6 +96,8 @@ void Render::show()
         //         mWindow.draw(buf);
         //     }
         // }
+        mView.setCenter({mCPU->ppuscrollx + 256.f / 2.f, mCPU->memoryMap.mPPURegs->ppuscroll + 240.0f / 2.f});
+        mWindow.setView(mView);
 
         vector<Sprite> *patternTable;
 
@@ -121,7 +124,7 @@ void Render::show()
                 mWindow.draw(buf);
             }
         }
-        
+
         if (mCPU->memoryMap.mPPURegs->ppuctrl.sprite_table == 0)
             patternTable = &mPatternTable1;
         else
