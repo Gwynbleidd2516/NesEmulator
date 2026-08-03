@@ -5,23 +5,17 @@
 #include <vector>
 #include <atomic>
 using namespace std;
-#include <SFML/Graphics.hpp>
-#include <SFML/OpenGL.hpp>
-using namespace sf;
 #include "Cpu.h"
 #include "Header.h"
+
+#define GLEW_STATIC
+#include "gl/glew.h"
+#include "GLFW/glfw3.h"
 
 class Render
 {
 private:
-    RenderWindow mWindow;
-    View mView;
-
-    Texture mTextueBank1;
-    Texture mTextueBank2;
-
-    vector<Sprite> mPatternTable1;
-    vector<Sprite> mPatternTable2;
+    GLFWwindow *mWindow;
 
     CPU *mCPU;
     PPU *mPPU;
@@ -34,8 +28,6 @@ public:
 
     void loadPattern();
 
-    bool isOpen() const;
-
     void show();
 
     void setCPU(CPU *cpu);
@@ -45,6 +37,8 @@ public:
     void setHeader(Header h);
 
     void setIsRunningAtomic(atomic<bool> *atm);
+
+    ~Render();
 };
 
 #endif
