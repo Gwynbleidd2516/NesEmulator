@@ -9,15 +9,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
 include(FetchContent)
 
-FetchContent_Declare(SFML
-    GIT_REPOSITORY https://github.com/SFML/SFML.git
-    GIT_TAG 3.0.2
-    GIT_SHALLOW ON
-    EXCLUDE_FROM_ALL
-    SYSTEM)
-
-FetchContent_MakeAvailable(SFML)
-
 FetchContent_Declare(
     spdlog
     GIT_REPOSITORY https://github.com/gabime/spdlog.git
@@ -25,6 +16,34 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(spdlog)
+
+set(ONLY_LIBS ON CACHE BOOL "Build only GLEW libraries, skip executables" FORCE)
+set(glew-cmake_BUILD_SHARED OFF CACHE BOOL "Disable shared library if you only want static" FORCE)
+
+FetchContent_Declare(
+    glew
+    GIT_REPOSITORY https://github.com/Perlmint/glew-cmake.git
+    GIT_TAG        master
+    GIT_SHALLOW    ON
+)
+
+# 4. Make the targets available
+FetchContent_MakeAvailable(glew)
+
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+
+# 3. Declare the GLFW repository and version
+FetchContent_Declare(
+    glfw
+    GIT_REPOSITORY https://github.com/glfw/glfw.git
+    GIT_TAG        3.4  # Or use a specific commit hash for stability
+    GIT_SHALLOW    ON   # Speeds up download by ignoring git history
+)
+
+# 4. Download and populate the target
+FetchContent_MakeAvailable(glfw)
 
 MACRO(HEADER_DIRECTORIES return_list search_path)
     # Find all header files recursively
@@ -55,12 +74,15 @@ message(--INCLUDE--> ${MY_INCLUDES})
 
 add_executable(main ${TARGET_SRC} ${TARGET_HEADERS})
 
-add_compile_definitions(DO_LOGS)
+# add_compile_definitions(DO_LOGS)
 
 target_include_directories(main PUBLIC ${MY_INCLUDES})
 
-target_link_libraries(main PRIVATE SFML::System SFML::Window SFML::Graphics SFML::Audio)
 target_link_libraries(main PRIVATE spdlog::spdlog)
+
+find_package(OpenGL REQUIRED)
+target_link_libraries(main PRIVATE libglew_static OpenGL::GL)
+target_link_libraries(main PRIVATE glfw)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin/$<0:>)
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${APP_NAME})
