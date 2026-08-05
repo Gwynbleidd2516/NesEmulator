@@ -7,8 +7,8 @@
 using namespace std;
 #include "Cpu.h"
 #include "Header.h"
+#include "NesSprite.h"
 
-#define GLEW_STATIC
 #include "gl/glew.h"
 #include "GLFW/glfw3.h"
 
@@ -25,8 +25,6 @@ private:
 
 public:
     Render();
-
-    void loadPattern();
 
     void show();
 
