@@ -1,14 +1,15 @@
 #ifndef PPU_
 #define PPU_
 
+#include "Pattern.h"
 #include "AttributeTable.h"
 #include "Logs.h"
 
 #pragma pack(push, 1)
 struct PPU
 {
-    uint8_t mPatternTable0[0x1000];
-    uint8_t mPatternTable1[0x1000];
+    Pattern mPatternTable0[256];
+    Pattern mPatternTable1[256];
 
     uint8_t mNametable0[30][32];
     AttributeTable mAttributeTable0[0x40];
