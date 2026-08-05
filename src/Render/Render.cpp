@@ -92,8 +92,7 @@ void Render::show()
             {
                 sprite.setTexture(patternTable[mCPU->oam[i].tile8x8]);
                 sprite.setPosition((float)mCPU->oam[i].x, (float)mCPU->oam[i].y);
-                // buf.setScale(Vector2f(-1.0f + !mCPU->memoryMap.mMirror->oam[i].flipHorizontally * 2.0f,
-                //                       -1.0f + !mCPU->memoryMap.mMirror->oam[i].flipVertically * 2.0f));
+                sprite.setFlips(mCPU->memoryMap.mMirror->oam[i].flipVertically, mCPU->memoryMap.mMirror->oam[i].flipHorizontally);
                 sprite.draw();
             }
         }

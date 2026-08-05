@@ -77,7 +77,6 @@ void NesProgram::renderThread()
     render.setCPU(&mCPU);
     render.setPPU(&mPPU);
     render.setIsRunningAtomic(&mIsRunningAtomic);
-    render.loadPattern();
     mLaunchSemaphoreRender.acquire();
 
     render.show();

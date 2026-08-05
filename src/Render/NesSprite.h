@@ -14,6 +14,8 @@ private:
     double mPosX = 0.0;
     double mPosY = 0.0;
     Pattern mPattern;
+    bool mFlipVertically = false;
+    bool mFlipHorizontally = false;
 
 public:
     NesSprite();
@@ -23,6 +25,8 @@ public:
     void setTexture(Pattern pt);
 
     void setPosition(double x, double y) noexcept;
+
+    void setFlips(bool v, bool h) noexcept;
 
     double getX() const;
 

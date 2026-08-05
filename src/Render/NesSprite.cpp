@@ -24,6 +24,8 @@ void NesSprite::draw()
     glUniform2f(findLocation("aPos"), mPosX, mPosY);
     glUniform2ui(findLocation("aLayer1"), mPattern.layer11, mPattern.layer12);
     glUniform2ui(findLocation("aLayer2"), mPattern.layer21, mPattern.layer22);
+    glUniform1i(findLocation("aFlipVertically"), mFlipVertically);
+    glUniform1i(findLocation("aFlipHorizontally"), mFlipHorizontally);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
@@ -36,6 +38,12 @@ void NesSprite::setPosition(double x, double y) noexcept
 {
     mPosX = x;
     mPosY = y;
+}
+
+void NesSprite::setFlips(bool v, bool h) noexcept
+{
+    mFlipVertically = v;
+    mFlipHorizontally = h;
 }
 
 double NesSprite::getX() const
@@ -98,12 +106,19 @@ void NesSprite::createShader()
     layout (location = 0) in vec2 aVert;
     uniform mat4 aProj;
     uniform vec2 aPos;
+    uniform bool aFlipVertically;
+    uniform bool aFlipHorizontally;
     out vec2 mVert;
     void main()
     {
         vec4 shift = vec4(4.0, 4.0, 0.0, 0.0);
         gl_Position = (vec4(aVert, 0.0, 1.0) + shift + vec4(aPos, 0.0, 0.0)) * aProj;
-        mVert = aVert + shift.xy;
+        mVert = aVert;
+        if (aFlipVertically)
+            mVert.y*=-1.0;
+        if (aFlipHorizontally)
+            mVert.x*=-1.0;
+        mVert+=shift.xy;
     }
 )glsl";
 
