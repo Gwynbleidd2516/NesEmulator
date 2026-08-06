@@ -16,6 +16,8 @@ private:
     Pattern mPattern;
     bool mFlipVertically = false;
     bool mFlipHorizontally = false;
+    uint8_t mScrollX = 0x0;
+    uint8_t mScrollY = 0x0;
 
 public:
     NesSprite();
@@ -27,6 +29,8 @@ public:
     void setPosition(double x, double y) noexcept;
 
     void setFlips(bool v, bool h) noexcept;
+
+    void setScroll(uint8_t x, uint8_t y) noexcept;
 
     double getX() const;
 

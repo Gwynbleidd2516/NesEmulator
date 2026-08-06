@@ -26,6 +26,7 @@ void NesSprite::draw()
     glUniform2ui(findLocation("aLayer2"), mPattern.layer21, mPattern.layer22);
     glUniform1i(findLocation("aFlipVertically"), mFlipVertically);
     glUniform1i(findLocation("aFlipHorizontally"), mFlipHorizontally);
+    glUniform2i(findLocation("aScroll"), mScrollX, mScrollY);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
@@ -44,6 +45,12 @@ void NesSprite::setFlips(bool v, bool h) noexcept
 {
     mFlipVertically = v;
     mFlipHorizontally = h;
+}
+
+void NesSprite::setScroll(uint8_t x, uint8_t y) noexcept
+{
+    mScrollX = x;
+    mScrollY = y;
 }
 
 double NesSprite::getX() const
@@ -108,11 +115,12 @@ void NesSprite::createShader()
     uniform vec2 aPos;
     uniform bool aFlipVertically;
     uniform bool aFlipHorizontally;
+    uniform ivec2 aScroll;
     out vec2 mVert;
     void main()
     {
         vec4 shift = vec4(4.0, 4.0, 0.0, 0.0);
-        gl_Position = (vec4(aVert, 0.0, 1.0) + shift + vec4(aPos, 0.0, 0.0)) * aProj;
+        gl_Position = (vec4(aVert, 0.0, 1.0) + shift + vec4(aPos,0.0,0.0) + vec4(aScroll.x,-aScroll.y,0.0,0.0)) * aProj;
         mVert = aVert;
         if (aFlipVertically)
             mVert.y*=-1.0;

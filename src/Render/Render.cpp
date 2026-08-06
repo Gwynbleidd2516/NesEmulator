@@ -58,6 +58,7 @@ void Render::show()
             else
                 patternTable = mPPU->mPatternTable1;
 
+            sprite.setScroll(mCPU->ppuscrollx, mCPU->memoryMap.mPPURegs->ppuscroll);
             for (int i = 0; i < 30; i++)
             {
                 for (int j = 0; j < 32; j++)
@@ -80,6 +81,7 @@ void Render::show()
                 }
             }
         }
+        sprite.setScroll(0x0, 0x0);
 
         if (mCPU->memoryMap.mPPURegs->ppumask.show_sprites == 1)
         {
