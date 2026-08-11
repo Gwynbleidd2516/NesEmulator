@@ -1,6 +1,7 @@
 #ifndef PPU_
 #define PPU_
 
+#include "Pallete.h"
 #include "Pattern.h"
 #include "AttributeTable.h"
 #include "Logs.h"
@@ -21,7 +22,8 @@ struct PPU
     AttributeTable mAttributeTable3[0x40];
 
     uint8_t mUnused[0xF00];
-    uint8_t mPallete[0x20];
+    Pallete mBackGroundPallete[4];
+    Pallete mSpritePallete[4];
     uint8_t mPalleteMirror[0xE0];
 
     uint8_t &operator[](size_t i)

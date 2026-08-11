@@ -34,14 +34,8 @@ Render::Render()
 
 void Render::show()
 {
-    // while (mWindow.isOpen())
-    // {
-    //     // mWindow.clear();
-    //     mView.setCenter({mCPU->ppuscrollx + 256.f / 2.f, mCPU->memoryMap.mPPURegs->ppuscroll + 240.0f / 2.f});
-    //     mWindow.setView(mView);
-    //     mWindow.display();
-    // }
     NesSprite sprite;
+    NesSprite background;
     while (!glfwWindowShouldClose(mWindow))
     {
         glfwPollEvents();
@@ -53,35 +47,70 @@ void Render::show()
 
         if (mCPU->memoryMap.mPPURegs->ppumask.show_background == 1)
         {
-            if (mCPU->memoryMap.mPPURegs->ppuctrl.background_table == 0)
-                patternTable = mPPU->mPatternTable0;
-            else
-                patternTable = mPPU->mPatternTable1;
+            patternTable = (mCPU->memoryMap.mPPURegs->ppuctrl.background_table == 0)
+                               ? mPPU->mPatternTable0
+                               : mPPU->mPatternTable1;
 
-            sprite.setScroll(mCPU->ppuscrollx, mCPU->memoryMap.mPPURegs->ppuscroll);
-            for (int i = 0; i < 30; i++)
+            uint8_t nametableIndex = mCPU->memoryMap.mPPURegs->ppuctrl.nametable;
+
+            background.setScroll(mCPU->ppuscrollx, mCPU->memoryMap.mPPURegs->ppuscroll);
+            uint8_t (*nametable)[32] = nullptr;
+            AttributeTable *attributeTable = nullptr;
+            switch (nametableIndex)
             {
-                for (int j = 0; j < 32; j++)
+            case 0:
+                nametable = mPPU->mNametable0;
+                attributeTable = mPPU->mAttributeTable0;
+                break;
+            case 1:
+                nametable = mPPU->mNametable1;
+                attributeTable = mPPU->mAttributeTable1;
+                break;
+            case 2:
+                nametable = mPPU->mNametable2;
+                attributeTable = mPPU->mAttributeTable2;
+                break;
+            case 3:
+                nametable = mPPU->mNametable3;
+                attributeTable = mPPU->mAttributeTable3;
+                break;
+            }
+
+            for (int tileY = 0; tileY < 30; ++tileY)
+            {
+                for (int tileX = 0; tileX < 32; ++tileX)
                 {
-                    sprite.setTexture(patternTable[mPPU->mNametable0[i][j]]);
-                    sprite.setPosition(8.0f * j, 8.0f * i);
-                    sprite.draw();
+                    // Индекс тайла в намтейбле
+                    uint8_t tileIndex = nametable[tileY][tileX];
 
-                    sprite.setTexture(patternTable[mPPU->mNametable1[i][j]]);
-                    sprite.setPosition(8.0f * j + 256.0f, 8.0f * i);
-                    sprite.draw();
+                    // Вычисляем палитру для этого тайла
+                    int attrIndex = (tileY / 4) * 8 + (tileX / 4);
+                    int rowInBlock = tileY % 4;
+                    int colInBlock = tileX % 4;
+                    uint8_t pal;
+                    if (rowInBlock < 2)
+                    {
+                        if (colInBlock < 2)
+                            pal = attributeTable[attrIndex].topLeft;
+                        else
+                            pal = attributeTable[attrIndex].topRight;
+                    }
+                    else
+                    {
+                        if (colInBlock < 2)
+                            pal = attributeTable[attrIndex].bottomLeft;
+                        else
+                            pal = attributeTable[attrIndex].bottomRight;
+                    }
 
-                    sprite.setTexture(patternTable[mPPU->mNametable2[i][j]]);
-                    sprite.setPosition(8.0f * j, 8.0f * i + 240.0f);
-                    sprite.draw();
-
-                    sprite.setTexture(patternTable[mPPU->mNametable3[i][j]]);
-                    sprite.setPosition(8.0f * j + 256.0f, 8.0f * i + 240.0f);
-                    sprite.draw();
+                    // Устанавливаем текстуру (паттерн), позицию и палитру
+                    background.setTexture(patternTable[tileIndex]);
+                    background.setPosition(8.0f * tileX, 8.0f * tileY);
+                    background.setPallete(mPPU->mBackGroundPallete[pal].color);
+                    background.draw();
                 }
             }
         }
-        sprite.setScroll(0x0, 0x0);
 
         if (mCPU->memoryMap.mPPURegs->ppumask.show_sprites == 1)
         {
@@ -92,6 +121,7 @@ void Render::show()
 
             for (size_t i = 0; i < 64; i++)
             {
+                sprite.setPallete(mPPU->mSpritePallete[mCPU->oam[i].pallete].color);
                 sprite.setTexture(patternTable[mCPU->oam[i].tile8x8]);
                 sprite.setPosition((float)mCPU->oam[i].x, (float)mCPU->oam[i].y);
                 sprite.setFlips(mCPU->memoryMap.mMirror->oam[i].flipVertically, mCPU->memoryMap.mMirror->oam[i].flipHorizontally);

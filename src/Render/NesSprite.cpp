@@ -21,6 +21,7 @@ NesSprite::NesSprite()
 
 void NesSprite::draw()
 {
+    glUniform2uiv(findLocation("aPallete"), 4, mPalete);
     glUniform2f(findLocation("aPos"), mPosX, mPosY);
     glUniform2ui(findLocation("aLayer1"), mPattern.layer11, mPattern.layer12);
     glUniform2ui(findLocation("aLayer2"), mPattern.layer21, mPattern.layer22);
@@ -51,6 +52,18 @@ void NesSprite::setScroll(uint8_t x, uint8_t y) noexcept
 {
     mScrollX = x;
     mScrollY = y;
+}
+
+void NesSprite::setPallete(ColorHue color[4])
+{
+    mPalete[0] = color[0].value;
+    mPalete[1] = color[0].hue;
+    mPalete[2] = color[1].value;
+    mPalete[3] = color[1].hue;
+    mPalete[4] = color[2].value;
+    mPalete[5] = color[2].hue;
+    mPalete[6] = color[3].value;
+    mPalete[7] = color[3].hue;
 }
 
 double NesSprite::getX() const
@@ -117,10 +130,11 @@ void NesSprite::createShader()
     uniform bool aFlipHorizontally;
     uniform ivec2 aScroll;
     out vec2 mVert;
+
     void main()
     {
         vec4 shift = vec4(4.0, 4.0, 0.0, 0.0);
-        gl_Position = (vec4(aVert, 0.0, 1.0) + shift + vec4(aPos,0.0,0.0) + vec4(aScroll.x,-aScroll.y,0.0,0.0)) * aProj;
+        gl_Position = (vec4(aVert, 0.0, 1.0) + shift + vec4(aPos,0.0,0.0) - vec4(aScroll,0.0,0.0)) * aProj;
         mVert = aVert;
         if (aFlipVertically)
             mVert.y*=-1.0;
@@ -133,11 +147,14 @@ void NesSprite::createShader()
     const char *fragmentShaderSource =
         R"glsl(
     #version 460 core
+
     in vec2 mVert;
     uniform uvec2 aLayer1;
     uniform uvec2 aLayer2;
+    uniform uvec2 aPallete[4];
     out vec4 FragColor;
-    void main() 
+
+    uint getDepth()
     {
         ivec2 pos = ivec2(mVert);
         uvec2 l;
@@ -155,17 +172,76 @@ void NesSprite::createShader()
         l.x >>= uint(pos.y * 8);
         l.y >>= uint(pos.y * 8);
     
-        uint bitX = uint(pos.x);
-        uint bit1 = (l.x >> (7 - bitX)) & 1u;
-        uint bit2 = (l.y >> (7 - bitX)) & 1u;
+        uint bitX = 7 - uint(pos.x);
+        uint bit1 = (l.x >> bitX) & 1u;
+        uint bit2 = (l.y >> bitX) & 1u;
 
-        uint num = bit1 * 2u + bit2;
-        float depth = float(num) / 3.0;
-        if (depth == 0)
-            FragColor = vec4(0.0);
-        else
-            FragColor = vec4(depth, depth, depth, 1.0);
+        uint num = bit2 * 2u + bit1;
+        return num;
+    }
 
+    vec4 getColor(uint colorValue, uint colorHue)
+    {
+        if(colorHue==0)
+        {
+            switch(colorValue)
+            {
+                case 0:
+                    return vec4(vec3(0.5), 1.0);
+                    break;
+                case 1:
+                    return vec4(vec3(0.75), 1.0);
+                    break;
+                case 2:
+                    return vec4(vec3(1.0), 1.0);
+                    break;
+                case 3:
+                    return vec4(vec3(1.0), 1.0);
+                    break;
+            }
+        }
+        if(colorHue>=13)
+            return vec4(0.0);
+        
+        const float PI = 3.14159265359;
+
+        float Vl;
+        float Vh;
+        switch(colorValue)
+        {
+            case 0:
+                Vl=0.350;
+                Vh=0.938;
+                break;
+            case 1:
+                Vl=0.518;
+                Vh=1.344;
+                break;
+            case 2:
+                Vl=0.963;
+                Vh=1.961;
+                break;
+            case 3:
+                Vl=1.551;
+                Vh=1.961;
+                break;
+        }
+        float theta=(colorHue-1)*PI/6;
+        
+        float y=(Vh+Vl)/2.0;
+        float i=((Vh-Vl)/2.0)*cos(theta);
+        float q=((Vh-Vl)/2.0)*sin(theta);
+
+        return vec4(y+0.956*i+0.621*q,
+                    y-0.272*i-0.647*q,
+                    y-1.106*i+1.703*q,
+                    1.0);
+    }
+
+    void main() 
+    {
+        uint d = getDepth();   
+        FragColor = getColor(aPallete[d].x, aPallete[d].y);
     }
 )glsl";
 

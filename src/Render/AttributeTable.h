@@ -3,13 +3,16 @@
 
 #include <stdint.h>
 
-struct AttributeTable
+union AttributeTable
 {
-    uint8_t topLeft : 2;
-    uint8_t topRight : 2;
-    uint8_t bottomLeft : 2;
-    uint8_t bottomRight : 2;
+    struct
+    {
+        uint8_t topLeft : 2;
+        uint8_t topRight : 2;
+        uint8_t bottomLeft : 2;
+        uint8_t bottomRight : 2;
+    };
+    uint8_t raw;
 };
-
 
 #endif
