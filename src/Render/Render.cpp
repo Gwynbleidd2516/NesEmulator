@@ -84,24 +84,21 @@ void Render::show()
                     uint8_t tileIndex = nametable[tileY][tileX];
 
                     // Вычисляем палитру для этого тайла
-                    int attrIndex = (tileY / 4) * 8 + (tileX / 4);
-                    int rowInBlock = tileY % 4;
-                    int colInBlock = tileX % 4;
+                    int attr_x = tileX / 4;
+                    int attr_y = tileY / 4;
+                    int byte_index = (attr_y * 8) + attr_x;
+                    bool is_right = (tileX % 4) >= 2;
+                    bool is_bottom = (tileY % 4) >= 2;
+
                     uint8_t pal;
-                    if (rowInBlock < 2)
-                    {
-                        if (colInBlock < 2)
-                            pal = attributeTable[attrIndex].topLeft;
-                        else
-                            pal = attributeTable[attrIndex].topRight;
-                    }
-                    else
-                    {
-                        if (colInBlock < 2)
-                            pal = attributeTable[attrIndex].bottomLeft;
-                        else
-                            pal = attributeTable[attrIndex].bottomRight;
-                    }
+                    if (!is_bottom && !is_right)
+                        pal = attributeTable[byte_index].topLeft;
+                    else if (!is_bottom && is_right)
+                        pal = attributeTable[byte_index].topRight;
+                    else if (is_bottom && !is_right)
+                        pal = attributeTable[byte_index].bottomLeft;
+                    else if (is_bottom && is_right)
+                        pal = attributeTable[byte_index].bottomRight;
 
                     // Устанавливаем текстуру (паттерн), позицию и палитру
                     background.setTexture(patternTable[tileIndex]);

@@ -47,19 +47,19 @@ struct PPU
     void write(size_t i, uint8_t val)
     {
         uint8_t buf = at(i);
-        if (i >= 0x2000 && i < 0x23C0)
+        if (i >= 0x2000 && i < 0x2400)
         {
             at(i + 0x400) = val;
         }
-        else if (i >= 0x2400 && i < 0x27C0)
+        else if (i >= 0x2400 && i < 0x2800)
         {
             at(i - 0x400) = val;
         }
-        else if (i >= 0x2800 && i < 0x2BC0)
+        else if (i >= 0x2800 && i < 0x2C00)
         {
             at(i + 0x400) = val;
         }
-        else if (i >= 0x2C00 && i < 0x2FC0)
+        else if (i >= 0x2C00 && i < 0x3000)
         {
             at(i - 0x400) = val;
         }
