@@ -106,7 +106,11 @@ void Render::show()
                     // Устанавливаем текстуру (паттерн), позицию и палитру
                     background.setTexture(patternTable[tileIndex]);
                     background.setPosition(8.0f * tileX, 8.0f * tileY);
-                    background.setPallete(mPPU->mBackGroundPallete[pal].color);
+                    ColorRgb clr[4] = {nesToRgb(mPPU->mBackGroundPallete[pal].color1),
+                                       nesToRgb(mPPU->mBackGroundPallete[pal].color2),
+                                       nesToRgb(mPPU->mBackGroundPallete[pal].color3),
+                                       nesToRgb(mPPU->mBackGroundPallete[pal].color4)};
+                    background.setPallete(clr);
                     background.draw();
                 }
             }
@@ -121,7 +125,11 @@ void Render::show()
 
             for (size_t i = 0; i < 64; i++)
             {
-                sprite.setPallete(mPPU->mSpritePallete[mCPU->oam[i].pallete].color);
+                ColorRgb clr[4] = {nesToRgb(mPPU->mSpritePallete[mCPU->oam[i].pallete].color1),
+                                   nesToRgb(mPPU->mSpritePallete[mCPU->oam[i].pallete].color2),
+                                   nesToRgb(mPPU->mSpritePallete[mCPU->oam[i].pallete].color3),
+                                   nesToRgb(mPPU->mSpritePallete[mCPU->oam[i].pallete].color4)};
+                sprite.setPallete(clr);
                 sprite.setTexture(patternTable[mCPU->oam[i].tile8x8]);
                 sprite.setPosition((float)mCPU->oam[i].x, (float)mCPU->oam[i].y);
                 sprite.setFlips(mCPU->memoryMap.mMirror->oam[i].flipVertically, mCPU->memoryMap.mMirror->oam[i].flipHorizontally);
@@ -157,4 +165,9 @@ void Render::setIsRunningAtomic(atomic<bool> *atm)
 Render::~Render()
 {
     glfwTerminate();
+}
+
+ColorRgb Render::nesToRgb(uint8_t nesColor)
+{
+    return NES_PALETTE[nesColor];
 }

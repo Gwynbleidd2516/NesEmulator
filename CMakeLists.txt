@@ -72,9 +72,9 @@ message(--TARGET_SRC--> ${TARGET_SRC})
 message(--TARGET_HEADERS--> ${TARGET_HEADERS})
 message(--INCLUDE--> ${MY_INCLUDES})
 
-add_executable(main ${TARGET_SRC} ${TARGET_HEADERS})
-
 # add_compile_definitions(DO_LOGS)
+
+add_executable(main ${TARGET_SRC} ${TARGET_HEADERS})
 
 target_include_directories(main PUBLIC ${MY_INCLUDES})
 

@@ -2,7 +2,7 @@
 #define NES_SPRITE
 
 #include "Pattern.h"
-#include "ColorHue.h"
+#include "Color.h"
 #include "gl/glew.h"
 #include <string>
 
@@ -19,7 +19,7 @@ private:
     bool mFlipHorizontally = false;
     uint8_t mScrollX = 0x0;
     uint8_t mScrollY = 0x0;
-    unsigned mPalete[8];
+    ColorRgbFloat mPalete[4];
 
 public:
     NesSprite();
@@ -34,7 +34,7 @@ public:
 
     void setScroll(uint8_t x, uint8_t y) noexcept;
 
-    void setPallete(ColorHue color[4]);
+    void setPallete(ColorRgb color[4]);
 
     double getX() const;
 

@@ -21,7 +21,7 @@ NesSprite::NesSprite()
 
 void NesSprite::draw()
 {
-    glUniform2uiv(findLocation("aPallete"), 4, mPalete);
+    glUniform3fv(findLocation("aPallete"), 4, &mPalete[0].r);
     glUniform2f(findLocation("aPos"), mPosX, mPosY);
     glUniform2ui(findLocation("aLayer1"), mPattern.layer11, mPattern.layer12);
     glUniform2ui(findLocation("aLayer2"), mPattern.layer21, mPattern.layer22);
@@ -54,16 +54,12 @@ void NesSprite::setScroll(uint8_t x, uint8_t y) noexcept
     mScrollY = y;
 }
 
-void NesSprite::setPallete(ColorHue color[4])
+void NesSprite::setPallete(ColorRgb color[4])
 {
-    mPalete[0] = color[0].value;
-    mPalete[1] = color[0].hue;
-    mPalete[2] = color[1].value;
-    mPalete[3] = color[1].hue;
-    mPalete[4] = color[2].value;
-    mPalete[5] = color[2].hue;
-    mPalete[6] = color[3].value;
-    mPalete[7] = color[3].hue;
+    for (size_t i = 0; i < 4; i++)
+    {
+        mPalete[i] = color[i];
+    }
 }
 
 double NesSprite::getX() const
@@ -151,7 +147,7 @@ void NesSprite::createShader()
     in vec2 mVert;
     uniform uvec2 aLayer1;
     uniform uvec2 aLayer2;
-    uniform uvec2 aPallete[4];
+    uniform vec3 aPallete[4];
     out vec4 FragColor;
 
     uint getDepth()
@@ -180,68 +176,13 @@ void NesSprite::createShader()
         return num;
     }
 
-    vec4 getColor(uint colorValue, uint colorHue)
-    {
-        if(colorHue==0)
-        {
-            switch(colorValue)
-            {
-                case 0:
-                    return vec4(vec3(0.5), 1.0);
-                    break;
-                case 1:
-                    return vec4(vec3(0.75), 1.0);
-                    break;
-                case 2:
-                    return vec4(vec3(1.0), 1.0);
-                    break;
-                case 3:
-                    return vec4(vec3(1.0), 1.0);
-                    break;
-            }
-        }
-        if(colorHue>=13)
-            return vec4(0.0);
-        
-        const float PI = 3.14159265359;
-
-        float Vl;
-        float Vh;
-        switch(colorValue)
-        {
-            case 0:
-                Vl=0.350;
-                Vh=0.938;
-                break;
-            case 1:
-                Vl=0.518;
-                Vh=1.344;
-                break;
-            case 2:
-                Vl=0.963;
-                Vh=1.961;
-                break;
-            case 3:
-                Vl=1.551;
-                Vh=1.961;
-                break;
-        }
-        float theta=(colorHue-1)*PI/6;
-        
-        float y=(Vh+Vl)/2.0;
-        float i=((Vh-Vl)/2.0)*cos(theta);
-        float q=((Vh-Vl)/2.0)*sin(theta);
-
-        return vec4(y+0.956*i+0.621*q,
-                    y-0.272*i-0.647*q,
-                    y-1.106*i+1.703*q,
-                    1.0);
-    }
-
     void main() 
     {
-        uint d = getDepth();   
-        FragColor = getColor(aPallete[d].x, aPallete[d].y);
+        uint d = getDepth();
+        if (d != 0)
+            FragColor = vec4(aPallete[d], 1.0);
+        else
+            FragColor = vec4(0.0);
     }
 )glsl";
 
