@@ -19,7 +19,7 @@ private:
     bool mFlipHorizontally = false;
     uint8_t mScrollX = 0x0;
     uint8_t mScrollY = 0x0;
-    ColorRgbFloat mPalete[4];
+    ColorRgb mPalete[4];
 
 public:
     NesSprite();
